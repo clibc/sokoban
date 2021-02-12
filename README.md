@@ -1,5 +1,5 @@
 # sokoban
-Sokoban game in pure C
+Sokoban game in C
 
 # Quick Start:
 
