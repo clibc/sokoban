@@ -23,6 +23,17 @@ int main()
     float resultdot = vec2_dot(textvec, textvec1);
     float result1 = vec2_magnitude(textvec);
 
+    float matrix[4][4];
+
+    int count = 0;
+    for (int i = 0; i < 4; ++i)
+    {
+        for (int j = 0; j < 4; ++j)
+        {
+            matrix[i][j] = i;
+        }
+    }
+
     /* while (!glfwWindowShouldClose(window)) */
     /* { */
     /*     printf("rendering ...\n"); */
