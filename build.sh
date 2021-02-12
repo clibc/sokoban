@@ -2,7 +2,8 @@
 
 files="../src/*.c"
 flags="-g -O0"
-includes="-I ../dependencies/"
+includes="-I ../dependencies/ \
+	 -I ../src/"
 libs="-lglfw -lGL"
 
 pushd ./output/
