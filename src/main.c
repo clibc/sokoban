@@ -1,5 +1,6 @@
 #include "GLFW/glfw3.h"
 #include "vector.h"
+#include <math.h>
 #include <stdio.h>
 
 int main()
@@ -16,10 +17,11 @@ int main()
 
     glfwMakeContextCurrent(window);
 
-    vec2 textvec = {0.4f, 1.8f};
-    vec2 textvec1 = {1.0f, 0.5f};
+    vec2 textvec = {-12.0f, 16.0f};
+    vec2 textvec1 = {12.0f, 9.0f};
 
-    vec2 result = vec2_multiply(textvec, textvec1);
+    float resultdot = vec2_dot(textvec, textvec1);
+    float result1 = vec2_magnitude(textvec);
 
     /* while (!glfwWindowShouldClose(window)) */
     /* { */

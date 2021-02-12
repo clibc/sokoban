@@ -3,10 +3,10 @@
 files="../src/*.c"
 flags="-g -O0"
 includes="-I ../dependencies/ \
-	 -I ../src/"
+	  -I ../src/"
 libs="-lglfw -lGL"
 
 pushd ./output/
-time gcc $flags $includes $files $libs
+time gcc $flags $includes $files -lm $libs
 popd
 

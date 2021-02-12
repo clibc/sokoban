@@ -22,8 +22,13 @@ vec3 vec3_add(vec3 v1, vec3 v2);
 vec2 vec2_subtract(vec2 v1, vec2 v2);
 vec3 vec3_subtract(vec3 v1, vec3 v2);
 
-// Dot product
-vec2 vec2_multiply(vec2 v1, vec2 v2);
-vec3 vec3_multiply(vec3 v1, vec3 v2);
+float vec2_dot(vec2 v1, vec2 v2);
+float vec3_dot(vec3 v1, vec3 v2);
+
+vec2 vec2_scale(float scalar, vec2 v);
+vec3 vec3_scale(float scalar, vec3 v);
+
+float vec2_magnitude(vec2 v);
+float vec3_magnitude(vec3 v);
 
 #endif
