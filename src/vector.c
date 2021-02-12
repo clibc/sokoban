@@ -18,7 +18,7 @@ float v_sqrt(float number)
 
 vec2 vec2_add(vec2 v1, vec2 v2)
 {
-    vec2 retval;
+    vec2 retval = {0};
     retval.x = v1.x + v2.x;
     retval.y = v1.y + v2.y;
     return retval;
@@ -26,7 +26,7 @@ vec2 vec2_add(vec2 v1, vec2 v2)
 
 vec3 vec3_add(vec3 v1, vec3 v2)
 {
-    vec3 retval;
+    vec3 retval = {0};
     retval.x = v1.x + v2.x;
     retval.y = v1.y + v2.y;
     retval.z = v1.z + v2.z;
@@ -35,7 +35,7 @@ vec3 vec3_add(vec3 v1, vec3 v2)
 
 vec2 vec2_subtract(vec2 v1, vec2 v2)
 {
-    vec2 retval;
+    vec2 retval = {0};
     retval.x = v1.x - v2.x;
     retval.y = v1.y - v2.y;
     return retval;
@@ -43,7 +43,7 @@ vec2 vec2_subtract(vec2 v1, vec2 v2)
 
 vec3 vec3_subtract(vec3 v1, vec3 v2)
 {
-    vec3 retval;
+    vec3 retval = {0};
     retval.x = v1.x - v2.x;
     retval.y = v1.y - v2.y;
     retval.z = v1.z - v2.z;
@@ -61,7 +61,7 @@ float vec3_dot(vec3 v1, vec3 v2)
 
 vec2 vec2_scale(float scalar, vec2 v)
 {
-    vec2 retval;
+    vec2 retval = {0};
     retval.x = v.x * scalar;
     retval.y = v.y * scalar;
     return retval;
@@ -69,7 +69,7 @@ vec2 vec2_scale(float scalar, vec2 v)
 
 vec3 vec3_scale(float scalar, vec3 v)
 {
-    vec3 retval;
+    vec3 retval = {0};
     retval.x = v.x * scalar;
     retval.y = v.y * scalar;
     retval.z = v.z * scalar;
