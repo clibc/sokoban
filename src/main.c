@@ -28,7 +28,7 @@ int main()
     matrix1.values[1][1] = 1;
     matrix1.values[2][1] = 2;
     matrix1.values[3][1] = 6;
-
+    // test
     matrix1.values[0][2] = 3;
     matrix1.values[1][2] = 3;
     matrix1.values[2][2] = 1;
