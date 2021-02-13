@@ -4,6 +4,9 @@
 #include <math.h>
 #include <stdio.h>
 
+#define WINDOW_WIDTH 600
+#define WINDOW_HEIGHT 600
+
 int main()
 {
     GLFWwindow *window;
@@ -14,7 +17,7 @@ int main()
         return 0;
     }
 
-    window = glfwCreateWindow(600, 600, "Sokoban", NULL, NULL);
+    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Sokoban", NULL, NULL);
 
     glfwMakeContextCurrent(window);
 
@@ -92,14 +95,17 @@ int main()
         printf("\n");
     }
 
-    /* while (!glfwWindowShouldClose(window)) */
-    /* { */
-    /*     printf("rendering ...\n"); */
-    /*     glClearColor(1.0f, 0.0f, 0.0f, 1.0f); */
-    /*     glClear(GL_COLOR_BUFFER_BIT); */
-    /*     glfwSwapBuffers(window); */
-    /*     glfwPollEvents(); */
-    /* } */
+    mat4 projection = mat4_ortho(0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f);
+
+    // while (!glfwWindowShouldClose(window))
+    // {
+    //     printf("rendering ...\n");
+    //     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    //     glClear(GL_COLOR_BUFFER_BIT);
+    //     glfwSwapBuffers(window);
+    //     glfwPollEvents();
+    // }
+
     glfwTerminate();
     return 0;
 }
