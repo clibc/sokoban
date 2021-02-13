@@ -9,5 +9,4 @@ Sokoban game in C
 `$ ./build.sh` <br/>
 
 ### Windows :
-`$ vcvarsall.bat x64` <br/>
-`$ build.bat` <br/>
+Not added yet
