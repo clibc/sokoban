@@ -38,4 +38,6 @@ mat4 mat4_ortho(float left, float right, float buttom, float top, float near, fl
     retval.values[0][3] = -((right + left) / (right - left));
     retval.values[1][3] = -((top + buttom) / (top - buttom));
     retval.values[2][3] = -((far + near) / (far - near));
+
+    return retval;
 }
