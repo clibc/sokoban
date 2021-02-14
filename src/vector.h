@@ -16,6 +16,15 @@ typedef struct
 
 } vec3;
 
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+    float a;
+
+} vec4;
+
 vec2 vec2_add(vec2 v1, vec2 v2);
 vec3 vec3_add(vec3 v1, vec3 v2);
 
