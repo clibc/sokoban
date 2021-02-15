@@ -16,6 +16,7 @@ int main()
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow *window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Sokoban", NULL, NULL);
     assert(window != NULL);
@@ -28,19 +29,28 @@ int main()
         0.0f, 0.5f, 0.0f};
 
     vertexbuffer vb = create_vertexbuffer(&vertices[0], sizeof(vertices));
-    set_vertexbuffer_attibutes(&vb, 0, 3, 3 * sizeof(float), (void *)0);
 
     shader simpleShader = create_shader("./src/shaders/vertex.vs",
                                         "./src/shaders/fragment.vs");
+    //set_vertexbuffer_attibutes(&vb, 0, 3, 3 * sizeof(float), (void *)0);
 
-    /* while (!glfwWindowShouldClose(window)) */
-    /* { */
-    /*     glClear(GL_COLOR_BUFFER_BIT); */
-    /*     glClearColor(1.0f, 0, 0, 1.0f); */
+    glBindBuffer(GL_ARRAY_BUFFER, vb.bufferID);
+    printf("%i\n", glGetError());
 
-    /*     glfwSwapBuffers(window); */
+    glEnableVertexAttribArray(0);
+    printf("%i\n", glGetError());
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    printf("%i\n", glGetError());
 
-    /*     glfwPollEvents(); */
-    /* } */
+    while (!glfwWindowShouldClose(window))
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.0f, 0, 0, 1.0f);
+
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
     return 0;
 }
