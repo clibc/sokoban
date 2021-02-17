@@ -4,7 +4,7 @@ files="../src/*.c"
 flags="-g -O0 -Wno-implicit-function-declaration"
 includes="-I ../dependencies/ \
 	  -I ../src/"
-libs="-lglfw -lGL"
+libs="-lGL -lglfw"
 
 if [ ! -d "./output/" ]
 then 
