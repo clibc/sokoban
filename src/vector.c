@@ -1,5 +1,4 @@
 #include "vector.h"
-#include <math.h>
 
 float v_sqrt(float number)
 {

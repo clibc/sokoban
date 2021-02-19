@@ -21,9 +21,9 @@ mat4 mat4_multiply(mat4 first, mat4 second)
             float sum = 0.0f;
             for (int r = 0; r < 4; ++r)
             {
-                sum += first.values[r * 4 + j] * second.values[j * 4 + r];
+                sum += first.values[r * 4 + j] * second.values[i * 4 + r];
             }
-            retval.values[j * 4 + i] = sum;
+            retval.values[i * 4 + j] = sum;
         }
     }
     return retval;

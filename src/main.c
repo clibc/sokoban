@@ -30,20 +30,22 @@ int main()
                                         "./src/shaders/fragment.vs");
     glUseProgram(simpleShader.programID);
 
-    mat4 matrix = mat4_ortho(0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f);
+    mat4 projection = mat4_ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT, -1.0f, 1.0f);
 
     vec3 vector = {300.0f, 300.0f, 0.0f};
-    vec3 vector2 = {200.0f, 100.0f, 0.0f};
-    mat4 matrix2 = mat4_translate(mat4_diagonal(1.0f), vector);
-    matrix2 = mat4_scale(matrix2, vector2);
+    vec3 vector2 = {100.0f, 100.0f, 0.0f};
+    mat4 model = mat4_translate(mat4_diagonal(1.0f), vector);
+    model = mat4_scale(model, vector2);
 
     vertexbuffer vb = create_vertexbuffer(vertices, sizeof(vertices));
     set_vertexbuffer_attibutes(&vb, 0, 3, 3 * sizeof(float), (void *)0);
 
     GLint location = glGetUniformLocation(simpleShader.programID, "projection");
     GLint location2 = glGetUniformLocation(simpleShader.programID, "model");
-    glUniformMatrix4fv(location, 1, GL_FALSE, &matrix);
-    glUniformMatrix4fv(location2, 1, GL_FALSE, &matrix2);
+
+    printf("%i\n", location);
+    glUniformMatrix4fv(location, 1, GL_FALSE, &projection);
+    glUniformMatrix4fv(location2, 1, GL_FALSE, &model);
 
     while (!glfwWindowShouldClose(window))
     {
