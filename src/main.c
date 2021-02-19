@@ -32,9 +32,10 @@ int main()
 
     mat4 matrix = mat4_ortho(0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f);
 
-    vec3 vector = {50.0f, 50.0f, 50.0f};
+    vec3 vector = {300.0f, 300.0f, 0.0f};
+    vec3 vector2 = {200.0f, 100.0f, 0.0f};
     mat4 matrix2 = mat4_translate(mat4_diagonal(1.0f), vector);
-    matrix2 = mat4_scale(matrix2, vector);
+    matrix2 = mat4_scale(matrix2, vector2);
 
     vertexbuffer vb = create_vertexbuffer(vertices, sizeof(vertices));
     set_vertexbuffer_attibutes(&vb, 0, 3, 3 * sizeof(float), (void *)0);
