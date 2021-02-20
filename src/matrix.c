@@ -1,5 +1,8 @@
 #include "matrix.h"
 
+#include <math.h>
+
+// c * 4  + r
 mat4 mat4_diagonal(float value)
 {
     mat4 retval = {0};
@@ -41,7 +44,6 @@ mat4 mat4_ortho(float left, float right, float buttom, float top, float near, fl
 
     return retval;
 }
-// c * 4  + r
 
 mat4 mat4_translate(mat4 matrix, vec3 vector)
 {
@@ -63,9 +65,50 @@ mat4 mat4_scale(mat4 matrix, vec3 vector)
     return scale;
 }
 
+mat4 mat4_rotate(float angle, vec3 vector)
+{
+    mat4 result = mat4_diagonal(1.0f);
+
+    float r = angle * (M_PI / 180.0f);
+    float c = cos(r);
+    float s = sin(r);
+    float omc = 1.0f - c;
+
+    float x = vector.x;
+    float y = vector.y;
+    float z = vector.z;
+
+    result.values[0 + 0 * 4] = x * omc + c;
+    result.values[1 + 0 * 4] = y * x * omc + z * s;
+    result.values[2 + 0 * 4] = x * z * omc - y * s;
+
+    result.values[0 + 1 * 4] = x * y * omc - z * s;
+    result.values[1 + 1 * 4] = y * omc + c;
+    result.values[2 + 1 * 4] = y * z * omc + x * s;
+
+    result.values[0 + 2 * 4] = x * z * omc + y * s;
+    result.values[1 + 2 * 4] = y * z * omc - x * s;
+    result.values[2 + 2 * 4] = z * omc + c;
+
+    return result;
+}
+
 vec4 mat4_multiply_vec3(mat4 matrix, vec3 vector)
 {
     vec4 retval = {0.0f};
+    retval.a = 1.0f;
+    float *temp = (float *)&retval;
+
+    for (int i = 0; i < 4; ++i)
+    {
+        float sum = 0;
+        sum += matrix.values[i * 4 + 0] * vector.x;
+        sum += matrix.values[i * 4 + 1] * vector.y;
+        sum += matrix.values[i * 4 + 2] * vector.z;
+        sum += matrix.values[i * 4 + 3];
+
+        temp[i] = sum;
+    }
 
     return retval;
 }

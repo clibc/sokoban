@@ -17,4 +17,5 @@ mat4 mat4_ortho(float left, float right, float buttom, float top, float near, fl
 
 mat4 mat4_translate(mat4 matrix, vec3 vector);
 
+mat4 mat4_rotate(float angle, vec3 vector);
 #endif

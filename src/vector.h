@@ -40,4 +40,22 @@ vec3 vec3_scale(float scalar, vec3 v);
 float vec2_magnitude(vec2 v);
 float vec3_magnitude(vec3 v);
 
+static inline vec2 vec2_create(float x, float y)
+{
+    vec2 vector = {x, y};
+    return vector;
+}
+
+static inline vec3 vec3_create(float x, float y, float z)
+{
+    vec3 vector = {x, y, z};
+    return vector;
+}
+
+static inline vec4 vec4_create(float x, float y, float z, float a)
+{
+    vec4 vector = {x, y, z, a};
+    return vector;
+}
+
 #endif

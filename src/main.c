@@ -36,6 +36,11 @@ int main()
     vec3 vector2 = {100.0f, 100.0f, 0.0f};
     mat4 model = mat4_translate(mat4_diagonal(1.0f), vector);
     model = mat4_scale(model, vector2);
+    mat4 rotate = mat4_rotate(-180.0f, vec3_create(0, 0, 1));
+    model = mat4_multiply(model, rotate);
+
+    vec3 test_vec = {0.5, 2.0f, 1.0f};
+    vec4 test = mat4_multiply_vec3(model, test_vec);
 
     vertexbuffer vb = create_vertexbuffer(vertices, sizeof(vertices));
     set_vertexbuffer_attibutes(&vb, 0, 3, 3 * sizeof(float), (void *)0);
@@ -49,6 +54,11 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
+        float angle = sin(30);
+        rotate = mat4_rotate(angle, vec3_create(0, 0, 1));
+        model = mat4_multiply(model, rotate);
+        glUniformMatrix4fv(location2, 1, GL_FALSE, &model);
+
         glClear(GL_COLOR_BUFFER_BIT);
         glClearColor(0.0f, 0, 0, 1.0f);
 
