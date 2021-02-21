@@ -12,4 +12,5 @@ Sokoban game in C
 To make the program work properly you have to add the required dlls to the `output/` directory (`glew32.dll` , `glfw3.dll`). <br/>
 Initialize enviroment variables: <br/>
 `$ vcvarsall.bat x64` <br/>
+Build the program: <br/>
 `$ .\build.bat`
