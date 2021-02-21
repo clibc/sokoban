@@ -2,6 +2,59 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+renderer_context *init_renderer(Window *win)
+{
+    renderer_context *context = (renderer_context *)malloc(sizeof(renderer_context));
+    float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f, 0.5f, 0.0f};
+
+    context->context_shader = create_shader("./src/shaders/vertex.vs",
+                                            "./src/shaders/fragment.vs");
+
+    context->projection = mat4_ortho(0.0f, win->width, 0.0f, win->height, -1.0f, 1.0f);
+
+    context->model = mat4_diagonal(1.0f);
+
+    context->context_vb = create_vertexbuffer(vertices, sizeof(vertices));
+    set_vertexbuffer_attibutes(&context->context_vb, 0, 3, 3 * sizeof(float), (void *)0);
+
+    context->projLoc = glGetUniformLocation(context->context_shader.programID, "projection");
+    context->modelLoc = glGetUniformLocation(context->context_shader.programID, "model");
+
+    glUseProgram(context->context_shader.programID);
+    glUniformMatrix4fv(context->projLoc, 1, GL_FALSE, &context->projection);
+    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, &context->model);
+    return context;
+}
+
+renderer_context *destroy_renderer(renderer_context *renderer)
+{
+    glDeleteProgram(renderer->context_shader.programID);
+    glDeleteBuffers(1, &renderer->context_vb.bufferID);
+    free(renderer);
+}
+
+void draw_quad(renderer_context *context, const vec3 *position, float cube_size)
+{
+    glUseProgram(context->context_shader.programID);
+    glBindBuffer(GL_ARRAY_BUFFER, context->context_vb.bufferID);
+
+    mat4 temp = mat4_diagonal(1.0f);
+    context->model = mat4_translate(&temp, position);
+
+    vec3 scale_vector = {cube_size, cube_size, 0.0f};
+    context->model = mat4_scale(&context->model, &scale_vector);
+
+    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, &context->model);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+void draw_colored_quad(renderer_context *context, vec3 position, vec3 color)
+{
+}
+
 char *_load_file(const char *filepath)
 {
     char *buffer;
@@ -112,16 +165,13 @@ vertexbuffer create_vertexbuffer(float *vertices, size_t bufferSize)
 void set_vertexbuffer_attibutes(vertexbuffer *vb, int index, size_t size, size_t stride, void *pointer)
 {
     glBindBuffer(GL_ARRAY_BUFFER, vb->bufferID);
-    printf("%i\n", glGetError());
 
     glEnableVertexAttribArray(index);
-    printf("%i\n", glGetError());
     glVertexAttribPointer(index,
                           size,
                           GL_FLOAT,
                           GL_FALSE,
                           stride,
                           pointer);
-    printf("%i\n", glGetError());
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

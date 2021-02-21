@@ -15,7 +15,7 @@ typedef struct
 } Window;
 
 Window *create_window(const char *name, int width, int height, int glMajor, int glMinor);
-void swap_buffers();
+inline void swap_buffers(Window *window) { glfwSwapBuffers(window->handle); }
 void handle_input();
-
+void destroy_window(Window *window);
 #endif

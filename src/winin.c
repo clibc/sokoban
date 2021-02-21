@@ -8,26 +8,29 @@ Window *create_window(const char *name, int width, int height, int glMajor, int 
 {
     Window *retval = (Window *)malloc(sizeof(Window));
 
-    if (!glfwInit())
-    {
-        printf("glfwInit() failed\n");
-        exit(-1);
-    }
+    retval->width = width;
+    retval->height = height;
+    retval->gl_major_ver = glMajor;
+    retval->gl_minor_ver = glMinor;
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, glMajor);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glMinor);
+    assert(glfwInit());
 
-    retval->handle = glfwCreateWindow(width, height, name, NULL, NULL);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, retval->gl_major_ver);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, retval->gl_minor_ver);
+
+    retval->handle = glfwCreateWindow(retval->width, retval->height, name, NULL, NULL);
 
     assert(retval->handle != GLEW_OK);
 
     glfwMakeContextCurrent(retval->handle);
 
-    if (glewInit() != 0)
-    {
-        printf("glewInit() failed\n");
-        exit(-1);
-    }
+    assert(glewInit() == 0);
 
     return retval;
+}
+
+void destroy_window(Window *window)
+{
+    glfwDestroyWindow(window->handle);
+    free(window);
 }
