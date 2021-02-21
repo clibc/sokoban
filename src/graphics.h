@@ -1,18 +1,8 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "GLFW/glfw3.h"
+#include "GLEW/glew.h"
 #include <stddef.h>
-
-typedef struct
-{
-    GLFWwindow *window;
-    int width;
-    int height;
-} window;
-
-window create_window(const char *name, int width, int height);
-void swap_buffer();
 
 typedef struct
 {

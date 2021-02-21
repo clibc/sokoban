@@ -1,7 +1,8 @@
 #include "graphics.h"
 #include "matrix.h"
 #include "vector.h"
-#include <assert.h>
+#include "winin.h"
+
 #include <math.h>
 #include <stdio.h>
 
@@ -10,16 +11,7 @@
 
 int main()
 {
-    if (!glfwInit())
-        return -1;
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-
-    GLFWwindow *window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Sokoban", NULL, NULL);
-    assert(window != NULL);
-
-    glfwMakeContextCurrent(window);
+    Window *win = create_window("Sokoban", WINDOW_WIDTH, WINDOW_HEIGHT, 3, 0);
 
     float vertices[] = {
         -0.5f, -0.5f, 0.0f,
@@ -55,7 +47,7 @@ int main()
     glUniformMatrix4fv(location, 1, GL_FALSE, &projection);
     glUniformMatrix4fv(location2, 1, GL_FALSE, &model);
 
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(win->handle))
     {
         float angle = sin(30);
         rotate = mat4_rotate(angle, &rotatevec);
@@ -67,7 +59,7 @@ int main()
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(win->handle);
         glfwPollEvents();
     }
     return 0;

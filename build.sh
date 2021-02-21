@@ -1,10 +1,10 @@
 #!/bin/bash
 
 files="../src/*.c"
-flags="-g -O0 -Wno-implicit-function-declaration"
+flags="-g -O0 -Wno-incompatible-pointer-types"
 includes="-I ../dependencies/ \
 	  -I ../src/"
-libs="-lGL -lglfw"
+libs="-lGL -lglfw -lGLEW"
 
 if [ ! -d "./output/" ]
 then 
