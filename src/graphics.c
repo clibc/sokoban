@@ -59,7 +59,7 @@ char *_load_file(const char *filepath)
 {
     char *buffer;
     int size = 0;
-    FILE *file = fopen(filepath, "r");
+    FILE *file = fopen(filepath, "rb");
 
     if (file)
     {
