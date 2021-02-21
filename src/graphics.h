@@ -40,7 +40,7 @@ typedef struct
 } renderer_context;
 
 renderer_context *init_renderer(Window *win);
-renderer_context *destroy_renderer(renderer_context *renderer);
+void *destroy_renderer(renderer_context *renderer);
 void draw_quad(renderer_context *context, const vec3 *position, float cube_size);
 void draw_colored_quad(renderer_context *context, vec3 position, vec3 color);
 

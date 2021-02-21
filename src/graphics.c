@@ -29,7 +29,7 @@ renderer_context *init_renderer(Window *win)
     return context;
 }
 
-renderer_context *destroy_renderer(renderer_context *renderer)
+void *destroy_renderer(renderer_context *renderer)
 {
     glDeleteProgram(renderer->context_shader.programID);
     glDeleteBuffers(1, &renderer->context_vb.bufferID);
@@ -58,7 +58,7 @@ void draw_colored_quad(renderer_context *context, vec3 position, vec3 color)
 char *_load_file(const char *filepath)
 {
     char *buffer;
-    int size;
+    int size = 0;
     FILE *file = fopen(filepath, "r");
 
     if (file)
