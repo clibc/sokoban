@@ -9,7 +9,7 @@ Sokoban game in C
 `$ ./build.sh` <br/>
 
 ### Windows (Visual Studio): <br/>
-In order to make the program work properly, you need to put the required dlls to the `output/` directory (`glew32.dll` , `glfw3.dll`). <br/>
+In order to make the program work properly, you need to put the required dlls to `output/` directory (`glew32.dll` , `glfw3.dll`). <br/>
 Initialize enviroment variables: <br/>
 `$ vcvarsall.bat x64` <br/>
 Build the program: <br/>
