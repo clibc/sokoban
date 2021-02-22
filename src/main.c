@@ -19,7 +19,7 @@ int main()
     while (!glfwWindowShouldClose(win->handle))
     {
         glClear(GL_COLOR_BUFFER_BIT);
-        glClearColor(0.0f, 0, 0, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         position = vec3_create(300.0f, 300.0f, 0.0f);
         draw_quad(context, &position, 70.0f);
@@ -30,6 +30,7 @@ int main()
         glfwSwapBuffers(win->handle);
         glfwPollEvents();
     }
+
     destroy_renderer(context);
     destroy_window(win);
     return 0;
