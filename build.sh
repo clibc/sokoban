@@ -1,7 +1,7 @@
 #!/bin/bash
 
 files="../src/*.c"
-flags="-g -O0 -Wno-incompatible-pointer-types"
+flags="-g -O0 -Wno-incompatible-pointer-types -std=c99"
 includes="-I ../dependencies/ \
 	  -I ../src/"
 libs="-lGL -lglfw -lGLEW"

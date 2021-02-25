@@ -16,6 +16,8 @@ int main()
 
     vec3 position = {300.0f, 300.0f, 0.0f};
 
+    vec4 color = {1.0f, 0.0f, 0.0f, 1.0f};
+
     while (!glfwWindowShouldClose(win->handle))
     {
         glClear(GL_COLOR_BUFFER_BIT);
@@ -25,7 +27,7 @@ int main()
         draw_quad(context, &position, 70.0f);
 
         position = vec3_create(200, 200, 0.0f);
-        draw_quad(context, &position, 70.0f);
+        draw_colored_quad(context, &position, &color, 90.0f);
 
         glfwSwapBuffers(win->handle);
         glfwPollEvents();

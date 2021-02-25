@@ -6,9 +6,12 @@ renderer_context *init_renderer(Window *win)
 {
     renderer_context *context = (renderer_context *)malloc(sizeof(renderer_context));
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
+        0.5f, 0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f};
+        -0.5f, -0.5f, 0.0f,
+        -0.5f, 0.5f, 0.0f};
+
+    unsigned int indices[] = {0, 1, 3, 1, 2, 3};
 
     context->context_shader = create_shader("./src/shaders/vertex.vs",
                                             "./src/shaders/fragment.vs");
@@ -18,6 +21,7 @@ renderer_context *init_renderer(Window *win)
     context->model = mat4_diagonal(1.0f);
 
     context->context_vb = create_vertexbuffer(vertices, sizeof(vertices));
+    context->context_ib = create_indexbuffer(indices, sizeof(indices));
     set_vertexbuffer_attibutes(&context->context_vb, 0, 3, 3 * sizeof(float), (void *)0);
 
     context->projLoc = glGetUniformLocation(context->context_shader.programID, "projection");
@@ -40,6 +44,7 @@ void draw_quad(renderer_context *context, const vec3 *position, float cube_size)
 {
     glUseProgram(context->context_shader.programID);
     glBindBuffer(GL_ARRAY_BUFFER, context->context_vb.bufferID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, context->context_ib);
 
     mat4 temp = mat4_diagonal(1.0f);
     context->model = mat4_translate(&temp, position);
@@ -48,11 +53,31 @@ void draw_quad(renderer_context *context, const vec3 *position, float cube_size)
     context->model = mat4_scale(&context->model, &scale_vector);
 
     glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, &context->model);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    vec4 def_color = {0.0f, 1.0f, 0.0f, 1.0f};
+    unsigned int loc = glGetUniformLocation(context->context_shader.programID, "u_color");
+    glUniform4fv(loc, 1, &def_color);
+
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
-void draw_colored_quad(renderer_context *context, vec3 position, vec3 color)
+void draw_colored_quad(renderer_context *context, const vec3 *position, const vec4 *color, float cube_size)
 {
+    glUseProgram(context->context_shader.programID);
+    glBindBuffer(GL_ARRAY_BUFFER, context->context_vb.bufferID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, context->context_ib);
+
+    mat4 temp = mat4_diagonal(1.0f);
+    context->model = mat4_translate(&temp, position);
+
+    vec3 scale_vector = {cube_size, cube_size, 0.0f};
+    context->model = mat4_scale(&context->model, &scale_vector);
+
+    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, &context->model);
+
+    unsigned int loc = glGetUniformLocation(context->context_shader.programID, "u_color");
+    glUniform4fv(loc, 1, color);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 char *_load_file(const char *filepath)
@@ -160,6 +185,15 @@ vertexbuffer create_vertexbuffer(float *vertices, size_t bufferSize)
     glBindBuffer(GL_ARRAY_BUFFER, retval.bufferID);
     glBufferData(GL_ARRAY_BUFFER, bufferSize, vertices, GL_STATIC_DRAW);
     return retval;
+}
+
+unsigned int create_indexbuffer(unsigned int *indices, size_t bufferSize)
+{
+    unsigned int bufferid;
+    glGenBuffers(1, &bufferid);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferid);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, bufferSize, indices, GL_STATIC_DRAW);
+    return bufferid;
 }
 
 void set_vertexbuffer_attibutes(vertexbuffer *vb, int index, size_t size, size_t stride, void *pointer)

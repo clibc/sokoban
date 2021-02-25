@@ -28,11 +28,13 @@ void set_vertexbuffer_attibutes(vertexbuffer *vb,
                                 size_t size,
                                 size_t stride,
                                 void *pointer);
+unsigned int create_indexbuffer(unsigned int *indices, size_t bufferSize);
 
 typedef struct
 {
     shader context_shader;
     vertexbuffer context_vb;
+    unsigned int context_ib;
     mat4 projection;
     mat4 model;
     GLint projLoc;
@@ -42,6 +44,6 @@ typedef struct
 renderer_context *init_renderer(Window *win);
 void *destroy_renderer(renderer_context *renderer);
 void draw_quad(renderer_context *context, const vec3 *position, float cube_size);
-void draw_colored_quad(renderer_context *context, vec3 position, vec3 color);
+void draw_colored_quad(renderer_context *context, const vec3 *position, const vec4 *color, float cube_size);
 
 #endif
