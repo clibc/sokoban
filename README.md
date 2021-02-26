@@ -14,3 +14,7 @@ Initialize enviroment variables: <br/>
 `$ vcvarsall.bat x64` <br/>
 Build the program: <br/>
 `$ .\build.bat`
+
+# SS
+### Testing projection matrices:
+![]()https://i.imgur.com/kat0UEA.png)
