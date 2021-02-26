@@ -20,10 +20,9 @@ Build the program: <br/>
 ![](https://i.imgur.com/kat0UEA.png)
 
 ```
-        position = vec3_create(300.0f, 300.0f, 0.0f);
-        draw_quad(context, &position, 70.0f);
+position = vec3_create(300.0f, 300.0f, 0.0f);
+draw_quad(context, &position, 70.0f);
 
-		position = vec3_create(200, 200, 0.0f);
-        draw_colored_quad(context, &position, &color, 120.0f);
-
+position = vec3_create(200, 200, 0.0f);
+draw_colored_quad(context, &position, &color, 120.0f);
 ```
