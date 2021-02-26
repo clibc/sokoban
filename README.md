@@ -17,4 +17,4 @@ Build the program: <br/>
 
 # SS
 ### Testing projection matrices:
-![]()https://i.imgur.com/kat0UEA.png)
+![](https://i.imgur.com/kat0UEA.png)
