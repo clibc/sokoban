@@ -9,6 +9,8 @@
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 600
 
+#include "imageloader.h"
+
 int main()
 {
     Window *win = create_window("Sokoban", WINDOW_WIDTH, WINDOW_HEIGHT, 3, 0);
@@ -17,6 +19,10 @@ int main()
     vec3 position = {300.0f, 300.0f, 0.0f};
 
     vec4 color = {1.0f, 0.0f, 0.0f, 1.0f};
+
+    load_png("/home/eax/Desktop/test/PNG/Character1.png");
+
+    exit(0);
 
     while (!glfwWindowShouldClose(win->handle))
     {
@@ -27,7 +33,7 @@ int main()
         draw_quad(context, &position, 70.0f);
 
         position = vec3_create(200, 200, 0.0f);
-        draw_colored_quad(context, &position, &color, 90.0f);
+        draw_colored_quad(context, &position, &color, 120.0f);
 
         glfwSwapBuffers(win->handle);
         glfwPollEvents();
