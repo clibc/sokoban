@@ -33,7 +33,7 @@ renderer_context *init_renderer(Window *win)
     return context;
 }
 
-void *destroy_renderer(renderer_context *renderer)
+void destroy_renderer(renderer_context *renderer)
 {
     glDeleteProgram(renderer->context_shader.programID);
     glDeleteBuffers(1, &renderer->context_vb.bufferID);
