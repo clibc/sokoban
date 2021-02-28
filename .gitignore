@@ -15,6 +15,7 @@
 *.dll
 output/
 libs/
+.vscode/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

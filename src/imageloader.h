@@ -11,9 +11,8 @@ typedef enum
     I_JPG
 } IMAGE_TYPE;
 
-static void load_png(const char *filepath)
+static char *read_entire_file(const char *filepath)
 {
-    // Read file into buffer
     char *buffer;
     int size = 0;
     FILE *file = fopen(filepath, "rb");
@@ -28,13 +27,21 @@ static void load_png(const char *filepath)
     }
     else
     {
-        printf("Image file is not found: %s\n", filepath);
-        exit(1);
+        printf("File is not found: %s\n", filepath);
+        return NULL;
     }
+    return buffer;
+}
+
+static void load_png(const char *filepath)
+{
+    char *buffer = read_entire_file(filepath);
 
     // Parse Data
 
     unsigned int lenght;
+
+    memcpy(&lenght, buffer, 4);
 
     printf("%c", buffer[0]);
     printf("%c", buffer[1]);

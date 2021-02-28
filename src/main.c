@@ -22,6 +22,11 @@ int main()
 
     load_png("/home/eax/Desktop/test/PNG/Character1.png");
 
+    int test = 1;
+    int test2 = test << 1;
+    int test3 = test << 2;
+    int test4 = test << 3;
+
     exit(0);
 
     while (!glfwWindowShouldClose(win->handle))
