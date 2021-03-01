@@ -20,12 +20,12 @@ int main()
 
     vec4 color = {1.0f, 0.0f, 0.0f, 1.0f};
 
-    load_png("/home/eax/Desktop/test/PNG/Character1.png");
+    int l = load_png("/home/eax/Desktop/test/PNG/Character1.png");
 
-    int test = 1;
-    int test2 = test << 1;
-    int test3 = test << 2;
-    int test4 = test << 3;
+    int swapped = (l & 0x000000FF) << 24;
+    swapped = swapped | ((l & 0x0000FF00) << 8);
+    swapped = swapped | ((l & 0x00FF0000) >> 8);
+    swapped = swapped | ((l & 0xFF000000) >> 24);
 
     exit(0);
 

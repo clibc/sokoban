@@ -33,7 +33,7 @@ static char *read_entire_file(const char *filepath)
     return buffer;
 }
 
-static void load_png(const char *filepath)
+static int load_png(const char *filepath)
 {
     char *buffer = read_entire_file(filepath);
 
@@ -41,14 +41,9 @@ static void load_png(const char *filepath)
 
     unsigned int lenght;
 
-    memcpy(&lenght, buffer, 4);
+    memcpy(&lenght, buffer + 33, 4);
 
-    printf("%c", buffer[0]);
-    printf("%c", buffer[1]);
-    printf("%c", buffer[2]);
-    printf("%c\n", buffer[3]);
-
-    printf("%x %x %x %x Lenght of image data: %i\n", (&lenght)[0], (&lenght)[1], (&lenght)[2], (&lenght)[3], lenght);
+    return lenght;
 }
 
 #endif
