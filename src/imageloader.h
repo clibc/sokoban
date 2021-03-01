@@ -1,6 +1,7 @@
 #ifndef IMAGE_LOADER_H
 #define IMAGE_LOADER_H
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,17 +34,48 @@ static char *read_entire_file(const char *filepath)
     return buffer;
 }
 
-static int load_png(const char *filepath)
+static inline int swap_byte_int(int value)
+{
+    int swapped = (value & 0x000000FF) << 24;
+    swapped = swapped | ((value & 0x0000FF00) << 8);
+    swapped = swapped | ((value & 0x00FF0000) >> 8);
+    swapped = swapped | ((value & 0xFF000000) >> 24);
+
+    return swapped;
+}
+
+#pragma pack(push, 1)
+typedef struct
+{
+    unsigned int width;
+    unsigned int height;
+    char bit_depth;
+    char color_type;
+    char complession_method;
+    char filter_method;
+    char interlace_method;
+
+} PNG_HEADER;
+#pragma pack(pop)
+
+static char *load_png(const char *filepath)
 {
     char *buffer = read_entire_file(filepath);
+    assert(buffer != NULL);
 
-    // Parse Data
+    PNG_HEADER header = {0};
+    memcpy(&header, buffer + 16, sizeof(PNG_HEADER));
+    header.width = swap_byte_int(header.width);
+    header.height = swap_byte_int(header.height);
 
-    unsigned int lenght;
-
+    int lenght;
     memcpy(&lenght, buffer + 33, 4);
+    lenght = swap_byte_int(lenght);
 
-    return lenght;
+    char *image_data = malloc(lenght * sizeof(char));
+    memcpy(&image_data[0], buffer + 41, lenght);
+
+    return image_data;
 }
 
 #endif
