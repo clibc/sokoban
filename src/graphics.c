@@ -28,8 +28,8 @@ renderer_context *init_renderer(Window *win)
     context->modelLoc = glGetUniformLocation(context->context_shader.programID, "model");
 
     glUseProgram(context->context_shader.programID);
-    glUniformMatrix4fv(context->projLoc, 1, GL_FALSE, &context->projection);
-    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, &context->model);
+    glUniformMatrix4fv(context->projLoc, 1, GL_FALSE, (GLfloat *)&context->projection);
+    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&context->model);
     return context;
 }
 
@@ -52,11 +52,11 @@ void draw_quad(renderer_context *context, const vec3 *position, float cube_size)
     vec3 scale_vector = {cube_size, cube_size, 0.0f};
     context->model = mat4_scale(&context->model, &scale_vector);
 
-    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, &context->model);
+    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&context->model);
 
     vec4 def_color = {0.0f, 1.0f, 0.0f, 1.0f};
     unsigned int loc = glGetUniformLocation(context->context_shader.programID, "u_color");
-    glUniform4fv(loc, 1, &def_color);
+    glUniform4fv(loc, 1, (GLfloat *)&def_color);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
@@ -73,10 +73,10 @@ void draw_colored_quad(renderer_context *context, const vec3 *position, const ve
     vec3 scale_vector = {cube_size, cube_size, 0.0f};
     context->model = mat4_scale(&context->model, &scale_vector);
 
-    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, &context->model);
+    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&context->model);
 
     unsigned int loc = glGetUniformLocation(context->context_shader.programID, "u_color");
-    glUniform4fv(loc, 1, color);
+    glUniform4fv(loc, 1, (GLfloat *)&color);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
