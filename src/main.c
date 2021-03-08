@@ -11,7 +11,7 @@
 
 #include "imageloader.h"
 
-int main()
+int main(int argc, char *argv[])
 {
     Window *win = create_window("Sokoban", WINDOW_WIDTH, WINDOW_HEIGHT, 3, 0);
     renderer_context *context = init_renderer(win);
@@ -20,7 +20,7 @@ int main()
 
     vec4 color = {1.0f, 0.0f, 0.0f, 1.0f};
 
-    char *data = load_png("C:\\Users\\eax\\Desktop\\test\\PNG\\Character2.png");
+    char *data = load_png("/home/eax/Desktop/test/PNG/Character2.png");
 
     int bb = 45;
     exit(0);

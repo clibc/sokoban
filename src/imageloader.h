@@ -72,8 +72,14 @@ static char *load_png(const char *filepath)
     memcpy(&lenght, buffer + 33, 4);
     lenght = swap_byte_int(lenght);
 
-    char *image_data = malloc(lenght * sizeof(char));
+    char *image_data = (char *)malloc(lenght * sizeof(char));
     memcpy(&image_data[0], buffer + 41, lenght);
+
+    char header_byte = *image_data;
+    char bfinal = (char)(header_byte & 1);
+    char btype = (char)(header_byte & 2);
+
+    printf("%i, %i\n", bfinal, btype);
 
     return image_data;
 }
