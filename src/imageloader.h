@@ -54,7 +54,6 @@ typedef struct
     char complession_method;
     char filter_method;
     char interlace_method;
-
 } PNG_HEADER;
 #pragma pack(pop)
 

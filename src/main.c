@@ -20,10 +20,9 @@ int main(int argc, char *argv[])
 
     vec4 color = {1.0f, 0.0f, 0.0f, 1.0f};
 
-    char *data = load_png("/home/eax/Desktop/test/PNG/Character2.png");
+    char *data = load_png("C:/Users/eax/Desktop/test/PNG/Character2.png");
 
     int bb = 45;
-    exit(0);
 
     while (!glfwWindowShouldClose(win->handle))
     {
