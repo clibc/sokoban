@@ -76,7 +76,7 @@ void draw_colored_quad(renderer_context *context, const vec3 *position, const ve
     glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&context->model);
 
     unsigned int loc = glGetUniformLocation(context->context_shader.programID, "u_color");
-    glUniform4fv(loc, 1, (GLfloat *)&color);
+    glUniform4fv(loc, 1, (GLfloat *)color);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
