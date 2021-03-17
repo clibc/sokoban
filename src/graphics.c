@@ -11,6 +11,12 @@ renderer_context *init_renderer(Window *win)
         -0.5f, -0.5f, 0.0f,
         -0.5f, 0.5f, 0.0f};
 
+    float texture_vertices[] = {
+        0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f};
+
     unsigned int indices[] = {0, 1, 3, 1, 2, 3};
 
     context->context_shader = create_shader("./src/shaders/vertex.vs",
@@ -21,8 +27,9 @@ renderer_context *init_renderer(Window *win)
     context->model = mat4_diagonal(1.0f);
 
     context->context_vb = create_vertexbuffer(vertices, sizeof(vertices));
-    context->context_ib = create_indexbuffer(indices, sizeof(indices));
     set_vertexbuffer_attibutes(&context->context_vb, 0, 3, 3 * sizeof(float), (void *)0);
+
+    context->context_ib = create_indexbuffer(indices, sizeof(indices));
 
     context->projLoc = glGetUniformLocation(context->context_shader.programID, "projection");
     context->modelLoc = glGetUniformLocation(context->context_shader.programID, "model");
@@ -30,6 +37,20 @@ renderer_context *init_renderer(Window *win)
     glUseProgram(context->context_shader.programID);
     glUniformMatrix4fv(context->projLoc, 1, GL_FALSE, (GLfloat *)&context->projection);
     glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&context->model);
+
+    // texture shader
+
+    context->texture_shader = create_shader("./src/shaders/texture.vs",
+                                            "./src/shaders/texture_frag.vs");
+
+    context->texture_vb = create_vertexbuffer(texture_vertices, sizeof(texture_vertices));
+    set_vertexbuffer_attibutes(&context->texture_vb, 0, 3, 5 * sizeof(float), (void *)0);
+    set_vertexbuffer_attibutes(&context->texture_vb, 1, 2, 5 * sizeof(float), (void *)(sizeof(float) * 3));
+
+    glUseProgram(context->texture_shader.programID);
+    GLuint texture_project_loc = glGetUniformLocation(context->texture_shader.programID, "projection");
+    glUniformMatrix4fv(texture_project_loc, 1, GL_FALSE, (GLfloat *)&context->projection);
+
     return context;
 }
 
@@ -76,7 +97,27 @@ void draw_colored_quad(renderer_context *context, const vec3 *position, const ve
     glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&context->model);
 
     unsigned int loc = glGetUniformLocation(context->context_shader.programID, "u_color");
-    glUniform4fv(loc, 1, (GLfloat *)&color);
+    glUniform4fv(loc, 1, (GLfloat *)color);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+void draw_textured_quad(renderer_context *context, const vec3 *position, float cube_size, GLuint textureID)
+{
+    glUseProgram(context->texture_shader.programID);
+    glBindBuffer(GL_ARRAY_BUFFER, context->texture_vb.bufferID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, context->context_ib);
+
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    mat4 temp = mat4_diagonal(1.0f);
+    context->model = mat4_translate(&temp, position);
+
+    vec3 scale_vector = {cube_size, cube_size, 0.0f};
+    context->model = mat4_scale(&context->model, &scale_vector);
+
+    GLuint model_loc = glGetUniformLocation(context->texture_shader.programID, "model");
+    glUniformMatrix4fv(model_loc, 1, GL_FALSE, (GLfloat *)&context->model);
+
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 

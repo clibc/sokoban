@@ -6,12 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef enum
-{
-    I_PNG,
-    I_JPG
-} IMAGE_TYPE;
-
 static char *read_entire_file(const char *filepath)
 {
     char *buffer;
@@ -47,40 +41,59 @@ static inline int swap_byte_int(int value)
 #pragma pack(push, 1)
 typedef struct
 {
-    unsigned int width;
-    unsigned int height;
-    char bit_depth;
-    char color_type;
-    char complession_method;
-    char filter_method;
-    char interlace_method;
-} PNG_HEADER;
+    uint16_t header_field;
+    uint32_t file_size;
+    uint16_t reserved1;
+    uint16_t reserved2;
+    uint32_t offset;
+} BMPHEADER;
+
+typedef struct
+{
+    uint32_t sizeof_header;
+    uint32_t width;
+    uint32_t height;
+    uint16_t color_planes;
+    uint16_t bits_per_pixel;
+    uint32_t compression_method;
+    uint32_t image_size;
+    uint32_t horizontal_resolution;
+    uint32_t vertical_resolution;
+    uint32_t numberofcolors_colorpalette;
+    uint32_t numberofcolors_important;
+
+} BITMAPCOREHEADER;
 #pragma pack(pop)
 
-static char *load_png(const char *filepath)
+static char *load_bmp(const char *filepath, unsigned int *width, unsigned int *height)
 {
-    char *buffer = read_entire_file(filepath);
-    assert(buffer != NULL);
+    char *file = read_entire_file(filepath);
 
-    PNG_HEADER header = {0};
-    memcpy(&header, buffer + 16, sizeof(PNG_HEADER));
-    header.width = swap_byte_int(header.width);
-    header.height = swap_byte_int(header.height);
+    BMPHEADER header = {0};
+    BITMAPCOREHEADER core = {0};
+    memcpy(&header, file, sizeof(BMPHEADER));
 
-    int lenght;
-    memcpy(&lenght, buffer + 33, 4);
-    lenght = swap_byte_int(lenght);
+    char *dibHeader = file + sizeof(BMPHEADER);
+    memcpy(&core, dibHeader, sizeof(BITMAPCOREHEADER));
 
-    char *image_data = (char *)malloc(lenght * sizeof(char));
-    memcpy(&image_data[0], buffer + 41, lenght);
+    printf("Image data offset : %d\n", header.offset);
+    printf("File size : %d\n", header.file_size);
+    printf("Width : %d\n", core.width);
+    printf("Height : %d\n", core.height);
+    printf("Bits per pixel : %d\n", core.bits_per_pixel);
+    printf("Compression method : %x\n", core.compression_method);
+    printf("Image Size : %d\n", core.image_size);
+    printf("H res : %d\n", core.horizontal_resolution);
+    printf("V res : %d\n", core.vertical_resolution);
+    printf("N color palette : %d\n", core.numberofcolors_colorpalette);
+    printf("N color important : %d\n", core.numberofcolors_important);
 
-    char header_byte = *image_data;
-    char bfinal = (char)(header_byte & 1);
-    char btype = (char)(header_byte & 2);
+    *width = core.width;
+    *height = core.height;
 
-    printf("%i, %i\n", bfinal, btype);
-
-    return image_data;
+    return file + header.offset;
 }
+
+// FUCK PNG LOAD BMP
 
 #endif

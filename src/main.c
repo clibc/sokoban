@@ -20,20 +20,26 @@ int main(int argc, char *argv[])
 
     vec4 color = {1.0f, 0.0f, 0.0f, 1.0f};
 
-    char *data = load_png("C:/Users/eax/Desktop/test/PNG/Character2.png");
+    unsigned int width, height;
+    char *data = load_bmp("test.bmp", &width, &height);
 
-    int bb = 45;
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
 
     while (!glfwWindowShouldClose(win->handle))
     {
         glClear(GL_COLOR_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-        position = vec3_create(300.0f, 300.0f, 0.0f);
-        draw_quad(context, &position, 70.0f);
-
         position = vec3_create(200, 200, 0.0f);
         draw_colored_quad(context, &position, &color, 120.0f);
+
+        position = vec3_create(200, 400, 0.0f);
+        draw_textured_quad(context, &position, 150.0f, texture);
 
         glfwSwapBuffers(win->handle);
         glfwPollEvents();
