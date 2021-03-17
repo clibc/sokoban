@@ -20,18 +20,12 @@ int main(int argc, char *argv[])
 
     vec4 color = {1.0f, 0.0f, 0.0f, 1.0f};
 
-    char *data = load_png("/home/eax/Desktop/test/PNG/Character2.png");
-
-    int bb = 45;
-    exit(0);
+    char *data = load_bmp("test.bmp");
 
     while (!glfwWindowShouldClose(win->handle))
     {
         glClear(GL_COLOR_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-        position = vec3_create(300.0f, 300.0f, 0.0f);
-        draw_quad(context, &position, 70.0f);
 
         position = vec3_create(200, 200, 0.0f);
         draw_colored_quad(context, &position, &color, 120.0f);
