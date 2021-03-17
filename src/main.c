@@ -22,6 +22,15 @@ int main(int argc, char *argv[])
 
     char *data = load_bmp("test.bmp");
 
+    float texCoords[] = {
+        0.0f, 0.0f, // lower-left corner
+        1.0f, 0.0f, // lower-right corner
+        0.5f, 1.0f  // top-center corner
+    };
+
+    GLuint texture;
+    glGenTextures(1, &texture);
+
     while (!glfwWindowShouldClose(win->handle))
     {
         glClear(GL_COLOR_BUFFER_BIT);

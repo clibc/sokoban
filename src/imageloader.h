@@ -42,20 +42,50 @@ static inline int swap_byte_int(int value)
 typedef struct
 {
     uint16_t header_field;
-    unsigned int file_size;
+    uint32_t file_size;
     uint16_t reserved1;
     uint16_t reserved2;
-    unsigned int offset;
-} BMP_HEADER;
+    uint32_t offset;
+} BMPHEADER;
+
+typedef struct
+{
+    uint32_t sizeof_header;
+    uint32_t width;
+    uint32_t height;
+    uint16_t color_planes;
+    uint16_t bits_per_pixel;
+    uint32_t compression_method;
+    uint32_t image_size;
+    uint32_t horizontal_resolution;
+    uint32_t vertical_resolution;
+    uint32_t numberofcolors_colorpalette;
+    uint32_t numberofcolors_important;
+
+} BITMAPCOREHEADER;
 #pragma pack(pop)
 
 static char *load_bmp(const char *filepath)
 {
     char *file = read_entire_file(filepath);
 
-    BMP_HEADER header = {0};
-    memcpy(&header, file, sizeof(BMP_HEADER));
+    BMPHEADER header = {0};
+    BITMAPCOREHEADER core = {0};
+    memcpy(&header, file, sizeof(BMPHEADER));
 
+    char *dibHeader = file + sizeof(BMPHEADER);
+    memcpy(&core, dibHeader, sizeof(BITMAPCOREHEADER));
+
+    printf("File size : %d\n", header.file_size);
+    printf("Width : %d\n", core.width);
+    printf("Height : %d\n", core.height);
+    printf("Bits per pixel : %d\n", core.bits_per_pixel);
+    printf("Compression method : %x\n", core.compression_method);
+    printf("Image Size : %d\n", core.image_size);
+    printf("H res : %d\n", core.horizontal_resolution);
+    printf("V res : %d\n", core.vertical_resolution);
+    printf("N color palette : %d\n", core.numberofcolors_colorpalette);
+    printf("N color important : %d\n", core.numberofcolors_important);
     return file;
 }
 
