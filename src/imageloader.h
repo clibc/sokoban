@@ -67,6 +67,8 @@ typedef struct
 
 static char *load_bmp(const char *filepath, unsigned int *width, unsigned int *height)
 {
+    // Format : BB GG RR AA
+
     char *file = read_entire_file(filepath);
 
     BMPHEADER header = {0};
@@ -76,20 +78,8 @@ static char *load_bmp(const char *filepath, unsigned int *width, unsigned int *h
     char *dibHeader = file + sizeof(BMPHEADER);
     memcpy(&core, dibHeader, sizeof(BITMAPCOREHEADER));
 
-    printf("Header Field: %c", (header.header_field & 0x00FF));
-    printf("%c\n", header.header_field >> 8);
-
-    printf("Image data offset : %d\n", header.offset);
-    printf("File size : %d\n", header.file_size);
-    printf("Width : %d\n", core.width);
-    printf("Height : %d\n", core.height);
-    printf("Bits per pixel : %d\n", core.bits_per_pixel);
-    printf("Compression method : %x\n", core.compression_method);
-    printf("Image Size : %d\n", core.image_size);
-    printf("H res : %d\n", core.horizontal_resolution);
-    printf("V res : %d\n", core.vertical_resolution);
-    printf("N color palette : %d\n", core.numberofcolors_colorpalette);
-    printf("N color important : %d\n", core.numberofcolors_important);
+    if (core.bits_per_pixel != 32)
+        printf("Image is not supported");
 
     *width = core.width;
     *height = core.height;

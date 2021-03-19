@@ -18,4 +18,9 @@ Window *create_window(const char *name, int width, int height, int glMajor, int 
 inline void swap_buffers(Window *window) { glfwSwapBuffers(window->handle); }
 void handle_input();
 void destroy_window(Window *window);
+
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
+
+int get_key_down(int keycode);
+
 #endif
