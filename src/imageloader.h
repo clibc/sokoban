@@ -76,6 +76,9 @@ static char *load_bmp(const char *filepath, unsigned int *width, unsigned int *h
     char *dibHeader = file + sizeof(BMPHEADER);
     memcpy(&core, dibHeader, sizeof(BITMAPCOREHEADER));
 
+    printf("Header Field: %c", (header.header_field & 0x00FF));
+    printf("%c\n", header.header_field >> 8);
+
     printf("Image data offset : %d\n", header.offset);
     printf("File size : %d\n", header.file_size);
     printf("Width : %d\n", core.width);
