@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
             printf("D is pressed...\n");
         }
 
-        render_level(context, grid);
+        render_level(context, &grid);
 
         glfwSwapBuffers(win->handle);
         glfwPollEvents();

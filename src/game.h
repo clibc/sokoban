@@ -11,6 +11,6 @@ typedef struct
 } Grid;
 
 Grid create_grid();
-void render_level(const renderer_context *context, const Grid *grid);
+void render_level(renderer_context *context, const Grid *grid);
 
 #endif

@@ -19,7 +19,7 @@ Grid create_grid()
     }
 }
 
-void render_level(const renderer_context *context, const Grid *grid)
+void render_level(renderer_context *context, const Grid *grid)
 {
     vec4 color = {1.0f, 0.0f, 0.0f, 1.0f};
 
