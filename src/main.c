@@ -11,6 +11,8 @@
 
 #include "imageloader.h"
 
+#include "game.h"
+
 int main(int argc, char *argv[])
 {
     Window *win = create_window("Sokoban", WINDOW_WIDTH, WINDOW_HEIGHT, 3, 0);
@@ -20,13 +22,12 @@ int main(int argc, char *argv[])
 
     vec4 color = {1.0f, 0.0f, 0.0f, 1.0f};
 
+    Grid grid = create_grid();
+
     while (!glfwWindowShouldClose(win->handle))
     {
-        //glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-        position = vec3_create(200, 200, 0.0f);
-        draw_colored_quad(context, &position, &color, 120.0f);
 
         if (get_key_down(GLFW_KEY_A))
         {
@@ -36,6 +37,8 @@ int main(int argc, char *argv[])
         {
             printf("D is pressed...\n");
         }
+
+        render_level(context, grid);
 
         glfwSwapBuffers(win->handle);
         glfwPollEvents();

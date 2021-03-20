@@ -7,10 +7,10 @@ typedef struct
 {
     uint32_t width;
     uint32_t height;
-    uint32_t *pointer;
+    uint32_t *grid_data;
 } Grid;
 
 Grid create_grid();
-void render_level(renderer_context *context, const Grid *grid);
+void render_level(const renderer_context *context, const Grid *grid);
 
 #endif
