@@ -17,6 +17,7 @@ Window *create_window(const char *name, int width, int height, int glMajor, int 
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, retval->gl_major_ver);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, retval->gl_minor_ver);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
     retval->handle = glfwCreateWindow(retval->width, retval->height, name, NULL, NULL);
 

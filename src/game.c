@@ -17,6 +17,8 @@ Grid create_grid()
             *(retval.grid_data + (i * retval.height + j)) = 1;
         }
     }
+
+    return retval;
 }
 
 void render_level(renderer_context *context, const Grid *grid)
