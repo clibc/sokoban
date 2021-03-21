@@ -38,15 +38,14 @@ typedef struct
     vertexbuffer context_vb;
     unsigned int context_ib;
     mat4 projection;
-    mat4 model;
     GLint projLoc;
     GLint modelLoc;
 } renderer_context;
 
 renderer_context *init_renderer(Window *win);
 void destroy_renderer(renderer_context *renderer);
-void draw_quad(renderer_context *context, const vec3 *position, float cube_size);
-void draw_colored_quad(renderer_context *context, const vec3 *position, const vec4 *color, float cube_size);
-void draw_textured_quad(renderer_context *context, const vec3 *position, float cube_size, GLuint textureID);
+void draw_quad(const renderer_context *context, const vec3 *position, float cube_size);
+void draw_colored_quad(const renderer_context *context, const vec3 *position, const vec4 *color, float cube_size);
+void draw_textured_quad(const renderer_context *context, const vec3 *position, float cube_size, GLuint textureID);
 
 #endif

@@ -24,8 +24,6 @@ renderer_context *init_renderer(Window *win)
 
     context->projection = mat4_ortho(0.0f, win->width, 0.0f, win->height, -1.0f, 1.0f);
 
-    context->model = mat4_diagonal(1.0f);
-
     context->context_vb = create_vertexbuffer(vertices, sizeof(vertices));
     set_vertexbuffer_attibutes(&context->context_vb, 0, 3, 3 * sizeof(float), (void *)0);
 
@@ -36,7 +34,6 @@ renderer_context *init_renderer(Window *win)
 
     glUseProgram(context->context_shader.programID);
     glUniformMatrix4fv(context->projLoc, 1, GL_FALSE, (GLfloat *)&context->projection);
-    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&context->model);
 
     // texture shader
 
@@ -61,19 +58,19 @@ void destroy_renderer(renderer_context *renderer)
     free(renderer);
 }
 
-void draw_quad(renderer_context *context, const vec3 *position, float cube_size)
+void draw_quad(const renderer_context *context, const vec3 *position, float cube_size)
 {
     glUseProgram(context->context_shader.programID);
     glBindBuffer(GL_ARRAY_BUFFER, context->context_vb.bufferID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, context->context_ib);
 
     mat4 temp = mat4_diagonal(1.0f);
-    context->model = mat4_translate(&temp, position);
+    temp = mat4_translate(&temp, position);
 
     vec3 scale_vector = {cube_size, cube_size, 0.0f};
-    context->model = mat4_scale(&context->model, &scale_vector);
+    temp = mat4_scale(&temp, &scale_vector);
 
-    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&context->model);
+    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&temp);
 
     vec4 def_color = {0.0f, 1.0f, 0.0f, 1.0f};
     unsigned int loc = glGetUniformLocation(context->context_shader.programID, "u_color");
@@ -82,26 +79,26 @@ void draw_quad(renderer_context *context, const vec3 *position, float cube_size)
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
-void draw_colored_quad(renderer_context *context, const vec3 *position, const vec4 *color, float cube_size)
+void draw_colored_quad(const renderer_context *context, const vec3 *position, const vec4 *color, float cube_size)
 {
     glUseProgram(context->context_shader.programID);
     glBindBuffer(GL_ARRAY_BUFFER, context->context_vb.bufferID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, context->context_ib);
 
     mat4 temp = mat4_diagonal(1.0f);
-    context->model = mat4_translate(&temp, position);
+    temp = mat4_translate(&temp, position);
 
     vec3 scale_vector = {cube_size, cube_size, 0.0f};
-    context->model = mat4_scale(&context->model, &scale_vector);
+    temp = mat4_scale(&temp, &scale_vector);
 
-    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&context->model);
+    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&temp);
 
     unsigned int loc = glGetUniformLocation(context->context_shader.programID, "u_color");
     glUniform4fv(loc, 1, (GLfloat *)color);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
-void draw_textured_quad(renderer_context *context, const vec3 *position, float cube_size, GLuint textureID)
+void draw_textured_quad(const renderer_context *context, const vec3 *position, float cube_size, GLuint textureID)
 {
     glUseProgram(context->texture_shader.programID);
     glBindBuffer(GL_ARRAY_BUFFER, context->texture_vb.bufferID);
@@ -110,13 +107,12 @@ void draw_textured_quad(renderer_context *context, const vec3 *position, float c
     glBindTexture(GL_TEXTURE_2D, textureID);
 
     mat4 temp = mat4_diagonal(1.0f);
-    context->model = mat4_translate(&temp, position);
+    temp = mat4_translate(&temp, position);
 
     vec3 scale_vector = {cube_size, cube_size, 0.0f};
-    context->model = mat4_scale(&context->model, &scale_vector);
+    temp = mat4_scale(&temp, &scale_vector);
 
-    GLuint model_loc = glGetUniformLocation(context->texture_shader.programID, "model");
-    glUniformMatrix4fv(model_loc, 1, GL_FALSE, (GLfloat *)&context->model);
+    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&temp);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

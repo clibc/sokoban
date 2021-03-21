@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
         {
             printf("A is pressed...\n");
         }
-        if (get_key_down(GLFW_KEY_D))
+        if (get_key_down(GLFW_KEY_D) && get_key_down(GLFW_KEY_C))
         {
             printf("D is pressed...\n");
         }
