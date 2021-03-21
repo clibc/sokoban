@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     Window *win = create_window("Sokoban", WINDOW_WIDTH, WINDOW_HEIGHT, 3, 0);
     renderer_context *context = init_renderer(win);
 
-    vec3 position = {300.0f, 300.0f, 0.0f};
+    vec3 position = {10.0f, 30.0f, 0.0f};
 
     vec4 color = {1.0f, 0.0f, 0.0f, 1.0f};
 

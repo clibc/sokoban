@@ -25,12 +25,18 @@ void render_level(renderer_context *context, const Grid *grid)
 {
     vec4 color = {1.0f, 0.0f, 0.0f, 1.0f};
 
-    for (int i = 0; i < grid->width; ++i)
+    float x = 41.0f;
+    float y = 41.0f;
+
+    for (int i = 1; i < grid->height; ++i)
     {
-        for (int j = 0; j < grid->height; ++j)
+        for (int j = 1; j < grid->width; ++j)
         {
-            vec3 position = {i * 42.0f, j * 42.0f, 0.0f};
+            vec3 position = {x, y, 0.0f};
             draw_colored_quad(context, &position, &color, 40.0f);
+            x += 42.0f;
         }
+        y += 42.0f;
+        x = 41.0f;
     }
 }
