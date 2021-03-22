@@ -18,11 +18,12 @@ int main(int argc, char *argv[])
     Window *win = create_window("Sokoban", WINDOW_WIDTH, WINDOW_HEIGHT, 3, 0);
     renderer_context *context = init_renderer(win);
 
-    vec3 position = {10.0f, 30.0f, 0.0f};
-
-    vec4 color = {1.0f, 0.0f, 0.0f, 1.0f};
-
     Grid grid = create_grid();
+
+    Player playr = {vec2_create(41.0f, 41.0f)};
+    vec4 color = {0.0f, 1.0f, 0.0f, 1.0f};
+
+    const float MOVE_DISTANCE = 42.0f;
 
     while (!glfwWindowShouldClose(win->handle))
     {
@@ -31,14 +32,23 @@ int main(int argc, char *argv[])
 
         if (get_key_down(GLFW_KEY_A))
         {
-            printf("A is pressed...\n");
+            playr.position.x -= MOVE_DISTANCE;
         }
-        if (get_key_down(GLFW_KEY_D) && get_key_down(GLFW_KEY_C))
+        else if (get_key_down(GLFW_KEY_D))
         {
-            printf("D is pressed...\n");
+            playr.position.x += MOVE_DISTANCE;
+        }
+        else if (get_key_down(GLFW_KEY_W))
+        {
+            playr.position.y += MOVE_DISTANCE;
+        }
+        else if (get_key_down(GLFW_KEY_S))
+        {
+            playr.position.y -= MOVE_DISTANCE;
         }
 
         render_level(context, &grid);
+        draw_colored_quad(context, &playr.position, &color, 40.0f);
 
         glfwSwapBuffers(win->handle);
         glfwPollEvents();

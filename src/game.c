@@ -7,7 +7,7 @@ Grid create_grid()
 {
     Grid retval = {0};
     retval.width = 10;
-    retval.height = 5;
+    retval.height = 10;
 
     retval.grid_data = (uint32_t *)malloc(retval.width * retval.height * sizeof(uint32_t));
     for (int i = 0; i < retval.width; ++i)

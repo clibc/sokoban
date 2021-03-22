@@ -2,6 +2,12 @@
 #define GAME_H
 
 #include "graphics.h"
+#include "vector.h"
+
+typedef struct
+{
+    vec2 position;
+} Player;
 
 typedef struct
 {
