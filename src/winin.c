@@ -107,3 +107,13 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
     if (action == GLFW_PRESS)
         set_key_lookup_table(key, 1);
 }
+
+void fill_screen_with_color(float r, float g, float b, float a)
+{
+    float p1 = r / 255.0f;
+    float p2 = g / 255.0f;
+    float p3 = b / 255.0f;
+    float p4 = a;
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(p1, p2, p3, p4);
+}

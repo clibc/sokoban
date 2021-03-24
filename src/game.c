@@ -40,3 +40,7 @@ void render_level(renderer_context *context, const Grid *grid)
         x = 41.0f;
     }
 }
+
+Quad create_quad(float x, float y)
+{
+}

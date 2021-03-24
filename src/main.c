@@ -27,8 +27,7 @@ int main(int argc, char *argv[])
 
     while (!glfwWindowShouldClose(win->handle))
     {
-        glClear(GL_COLOR_BUFFER_BIT);
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        fill_screen_with_color(21, 21, 21, 1);
 
         if (get_key_down(GLFW_KEY_A))
         {

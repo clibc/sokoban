@@ -23,4 +23,5 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 
 int get_key_down(int keycode);
 
+void fill_screen_with_color(float r, float g, float b, float a);
 #endif
