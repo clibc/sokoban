@@ -146,7 +146,7 @@ shader create_shader(const char *vpath, const char *fpath)
 {
     char *vsource = _load_file(vpath);
     GLuint vshader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vshader, 1, &vsource, NULL);
+    glShaderSource(vshader, 1, (const char **)&vsource, NULL);
     glCompileShader(vshader);
 
     GLint success = 0;
@@ -165,7 +165,7 @@ shader create_shader(const char *vpath, const char *fpath)
 
     char *fsource = _load_file(fpath);
     GLuint fshader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fshader, 1, &fsource, NULL);
+    glShaderSource(fshader, 1, (const char **)&fsource, NULL);
     glCompileShader(fshader);
 
     glGetShaderiv(fshader, GL_COMPILE_STATUS, &success);
