@@ -6,7 +6,7 @@
 
 typedef struct
 {
-    vec2 position;
+    vec3 position;
 } Player;
 
 typedef struct
