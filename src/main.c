@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
 
     Grid grid = create_grid();
 
+    //c
     Player playr = {vec3_create(41.0f, 41.0f, 0.0f)};
     vec4 color = {0.0f, 1.0f, 0.0f, 1.0f};
 
