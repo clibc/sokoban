@@ -13,6 +13,57 @@
 
 #include "game.h"
 
+float *create_positions_for_grid(int x, int y)
+{
+    size_t buffer_size = x * y * 12 * sizeof(float);
+    float *positions = (float *)malloc(x * y * sizeof(float));
+
+    unsigned int count = 0;
+    for (int i = 0; i < x; ++i)
+    {
+        for (int j = 0; j < y; ++j)
+        {
+            positions[count++] = i + 0.5f;
+            positions[count++] = j + 0.5f;
+            positions[count++] = 0.0;
+
+            positions[count++] = i + 0.5f;
+            positions[count++] = j - 0.5f;
+            positions[count++] = 0.0f;
+
+            positions[count++] = i - 0.5f;
+            positions[count++] = j - 0.5f;
+            positions[count++] = 0.0f;
+
+            positions[count++] = i - 0.5f;
+            positions[count++] = j + 0.5f;
+            positions[count++] = 0.0f;
+        }
+    }
+    return positions;
+}
+
+int *create_indices(int quad_count)
+{
+    const int size = quad_count * 6;
+    int *indices = (int *)malloc(size * sizeof(int));
+
+    int count = 0;
+    for (int i = 0; i < size; i = i + 6)
+    {
+        indices[i] = count;
+        indices[i + 1] = count + 1;
+        indices[i + 2] = count + 3;
+        indices[i + 3] = count + 1;
+        indices[i + 4] = count + 2;
+        indices[i + 5] = count + 3;
+
+        count += 4;
+    }
+
+    return indices;
+}
+
 int main(int argc, char *argv[])
 {
     Window *win = create_window("Sokoban", WINDOW_WIDTH, WINDOW_HEIGHT, 3, 0);
@@ -20,11 +71,13 @@ int main(int argc, char *argv[])
 
     Grid grid = create_grid();
 
-    //c
     Player playr = {vec3_create(41.0f, 41.0f, 0.0f)};
     vec4 color = {0.0f, 1.0f, 0.0f, 1.0f};
 
     const float MOVE_DISTANCE = 42.0f;
+
+    float *poss = create_positions_for_grid(2, 2);
+    int *ind = create_indices(4);
 
     while (!glfwWindowShouldClose(win->handle))
     {
