@@ -3,7 +3,6 @@
 #include "vector.h"
 #include "winin.h"
 
-#include <math.h>
 #include <stdio.h>
 
 #define WINDOW_WIDTH 600
@@ -16,37 +15,43 @@
 float *create_positions_for_grid(int x, int y)
 {
     size_t buffer_size = x * y * 12 * sizeof(float);
-    float *positions = (float *)malloc(x * y * sizeof(float));
+    float *positions = (float *)malloc(buffer_size);
 
     unsigned int count = 0;
-    for (int i = 0; i < x; ++i)
+
+    // 1 = x,y
+    // 2 = x, y-1
+    // 3 = x-1, y-1
+    // 4 = x-1, y
+
+    for (int i = 0; i < y; ++i)
     {
-        for (int j = 0; j < y; ++j)
+        for (int j = 0; j < x; ++j)
         {
-            positions[count++] = i + 0.5f;
-            positions[count++] = j + 0.5f;
+            positions[count++] = j;
+            positions[count++] = i;
             positions[count++] = 0.0;
 
-            positions[count++] = i + 0.5f;
-            positions[count++] = j - 0.5f;
+            positions[count++] = j;
+            positions[count++] = i - 1;
             positions[count++] = 0.0f;
 
-            positions[count++] = i - 0.5f;
-            positions[count++] = j - 0.5f;
+            positions[count++] = j - 1;
+            positions[count++] = i - 1;
             positions[count++] = 0.0f;
 
-            positions[count++] = i - 0.5f;
-            positions[count++] = j + 0.5f;
+            positions[count++] = j - 1;
+            positions[count++] = i;
             positions[count++] = 0.0f;
         }
     }
     return positions;
 }
 
-int *create_indices(int quad_count)
+unsigned int *create_indices(int quad_count)
 {
     const int size = quad_count * 6;
-    int *indices = (int *)malloc(size * sizeof(int));
+    unsigned int *indices = (int *)malloc(size * sizeof(int));
 
     int count = 0;
     for (int i = 0; i < size; i = i + 6)
@@ -76,9 +81,30 @@ int main(int argc, char *argv[])
 
     const float MOVE_DISTANCE = 42.0f;
 
-    float *poss = create_positions_for_grid(2, 2);
-    int *ind = create_indices(4);
+    float *vertices = create_positions_for_grid(4, 4);
+    int *indices = create_indices(16);
 
+    vertexbuffer vb = create_vertexbuffer(vertices, sizeof(float) * 16 * 12);
+    set_vertexbuffer_attibutes(&vb, 0, 3, 3 * sizeof(float), (void *)0);
+    unsigned int ib = create_indexbuffer(indices, sizeof(unsigned int) * 16 * 6);
+
+    ///////
+    glUseProgram(context->context_shader.programID);
+
+    vec3 pos = vec3_create(400.0f, 400.0f, 0.0f);
+    mat4 temp = mat4_diagonal(1.0f);
+    temp = mat4_translate(&temp, &pos);
+
+    vec3 scale_vector = {100, 100, 0.0f};
+    temp = mat4_scale(&temp, &scale_vector);
+
+    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&temp);
+
+    vec4 def_color = {0.0f, 1.0f, 0.0f, 1.0f};
+    unsigned int loc = glGetUniformLocation(context->context_shader.programID, "u_color");
+    glUniform4fv(loc, 1, (GLfloat *)&def_color);
+
+    ///////
     while (!glfwWindowShouldClose(win->handle))
     {
         fill_screen_with_color(21, 21, 21, 1);
@@ -100,9 +126,10 @@ int main(int argc, char *argv[])
             playr.position.y -= MOVE_DISTANCE;
         }
 
-        render_level(context, &grid);
-        draw_colored_quad(context, &playr.position, &color, 40.0f);
+        /* render_level(context, &grid); */
+        /* draw_colored_quad(context, &playr.position, &color, 40.0f); */
 
+        glDrawElements(GL_TRIANGLES, 16 * 6, GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(win->handle);
         glfwPollEvents();
     }
