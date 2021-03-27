@@ -3,14 +3,12 @@
 #include "vector.h"
 #include "winin.h"
 
-#include <stdio.h>
-
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 600
 
-#include "imageloader.h"
-
 #include "game.h"
+
+#include <stdlib.h>
 
 float *create_positions_for_grid(int x, int y)
 {
@@ -51,7 +49,7 @@ float *create_positions_for_grid(int x, int y)
 unsigned int *create_indices(int quad_count)
 {
     const int size = quad_count * 6;
-    unsigned int *indices = (int *)malloc(size * sizeof(int));
+    unsigned int *indices = (unsigned int *)malloc(size * sizeof(int));
 
     int count = 0;
     for (int i = 0; i < size; i = i + 6)
@@ -74,15 +72,14 @@ int main(int argc, char *argv[])
     Window *win = create_window("Sokoban", WINDOW_WIDTH, WINDOW_HEIGHT, 3, 0);
     renderer_context *context = init_renderer(win);
 
-    Grid grid = create_grid();
+    //Grid grid = create_grid();
 
     Player playr = {vec3_create(41.0f, 41.0f, 0.0f)};
-    vec4 color = {0.0f, 1.0f, 0.0f, 1.0f};
 
     const float MOVE_DISTANCE = 42.0f;
 
     float *vertices = create_positions_for_grid(4, 4);
-    int *indices = create_indices(16);
+    unsigned int *indices = create_indices(16);
 
     vertexbuffer vb = create_vertexbuffer(vertices, sizeof(float) * 16 * 12);
     set_vertexbuffer_attibutes(&vb, 0, 3, 3 * sizeof(float), (void *)0);
@@ -90,6 +87,7 @@ int main(int argc, char *argv[])
 
     ///////
     glUseProgram(context->context_shader.programID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 
     vec3 pos = vec3_create(400.0f, 400.0f, 0.0f);
     mat4 temp = mat4_diagonal(1.0f);

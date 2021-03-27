@@ -41,6 +41,6 @@ void render_level(renderer_context *context, const Grid *grid)
     }
 }
 
-Quad create_quad(float x, float y)
-{
-}
+/* Quad create_quad(float x, float y) */
+/* { */
+/* } */

@@ -103,7 +103,6 @@ int get_key_down(int keycode)
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-    const int ScanKey = glfwGetKeyScancode(key);
     if (action == GLFW_PRESS)
         set_key_lookup_table(key, 1);
 }
