@@ -67,7 +67,7 @@ unsigned int *create_indices(int quad_count)
     return indices;
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     Window *win = create_window("Sokoban", WINDOW_WIDTH, WINDOW_HEIGHT, 3, 0);
     renderer_context *context = init_renderer(win);
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     glUseProgram(context->context_shader.programID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 
-    vec3 pos = vec3_create(400.0f, 400.0f, 0.0f);
+    vec3 pos = vec3_create(200.0f, 200.0f, 0.0f);
     mat4 temp = mat4_diagonal(1.0f);
     temp = mat4_translate(&temp, &pos);
 

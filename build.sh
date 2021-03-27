@@ -2,7 +2,7 @@
 
 CC="gcc"
 files="./src/*.c"
-flags="-g -O0 -Wall -std=c17"
+flags="-g -O0 -Wall -Wextra -std=c17"
 includes="-I ./dependencies/ \
 	  -I ./src/"
 libs="-lGL -lglfw -lGLEW"

@@ -10,9 +10,9 @@ Grid create_grid()
     retval.height = 10;
 
     retval.grid_data = (uint32_t *)malloc(retval.width * retval.height * sizeof(uint32_t));
-    for (int i = 0; i < retval.width; ++i)
+    for (uint32_t i = 0; i < retval.width; ++i)
     {
-        for (int j = 0; j < retval.height; ++j)
+        for (uint32_t j = 0; j < retval.height; ++j)
         {
             *(retval.grid_data + (i * retval.height + j)) = 1;
         }
@@ -28,9 +28,9 @@ void render_level(renderer_context *context, const Grid *grid)
     float x = 41.0f;
     float y = 41.0f;
 
-    for (int i = 1; i < grid->height; ++i)
+    for (uint32_t i = 1; i < grid->height; ++i)
     {
-        for (int j = 1; j < grid->width; ++j)
+        for (uint32_t j = 1; j < grid->width; ++j)
         {
             vec3 position = {x, y, 0.0f};
             draw_colored_quad(context, &position, &color, 40.0f);

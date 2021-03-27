@@ -51,7 +51,7 @@ mat4 mat4_ortho(float left, float right, float buttom, float top, float near, fl
 
 mat4 mat4_translate(const mat4 *matrix, const vec3 *vector)
 {
-    mat4 translation = mat4_diagonal(1.0f);
+    mat4 translation = *matrix;
     translation.values[3 * 4 + 0] = vector->x;
     translation.values[3 * 4 + 1] = vector->y;
     translation.values[3 * 4 + 2] = vector->z;
@@ -99,7 +99,7 @@ mat4 mat4_rotate(float angle, const vec3 *vector)
 
 vec4 mat4_multiply_vec3(const mat4 *matrix, const vec3 *vector)
 {
-    vec4 retval = {0.0f};
+    vec4 retval = {0.0f, 0.0f, 0.0f, 0.0f};
     retval.a = 1.0f;
     float *temp = (float *)&retval;
 
