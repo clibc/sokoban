@@ -10,7 +10,28 @@
 
 #include <stdlib.h>
 
-float *create_positions_for_grid(int x, int y)
+void generate_batch_quad(float *array, int x, int y)
+{
+    const float stride = 0.5f;
+
+    array[0] = (float)x + stride;
+    array[1] = (float)y + stride;
+    array[2] = 0.0f;
+
+    array[3] = (float)x + stride;
+    array[4] = (float)y - stride;
+    array[5] = 0.0f;
+
+    array[6] = (float)x - stride;
+    array[7] = (float)y - stride;
+    array[8] = 0.0f;
+
+    array[9] = (float)x - stride;
+    array[10] = (float)y + stride;
+    array[11] = 0.0f;
+}
+
+float *create_positions_for_grid(int x, int y, float space_size)
 {
     size_t buffer_size = x * y * 12 * sizeof(float);
     float *positions = (float *)malloc(buffer_size);
@@ -26,21 +47,8 @@ float *create_positions_for_grid(int x, int y)
     {
         for (int j = 0; j < x; ++j)
         {
-            positions[count++] = j;
-            positions[count++] = i;
-            positions[count++] = 0.0;
-
-            positions[count++] = j;
-            positions[count++] = i - 1;
-            positions[count++] = 0.0f;
-
-            positions[count++] = j - 1;
-            positions[count++] = i - 1;
-            positions[count++] = 0.0f;
-
-            positions[count++] = j - 1;
-            positions[count++] = i;
-            positions[count++] = 0.0f;
+            generate_batch_quad(&positions[count], j + (j * space_size), i + (i * space_size));
+            count += 12;
         }
     }
     return positions;
@@ -78,12 +86,14 @@ int main()
 
     const float MOVE_DISTANCE = 42.0f;
 
-    float *vertices = create_positions_for_grid(4, 4);
-    unsigned int *indices = create_indices(16);
+    const int quad_count = 25;
 
-    vertexbuffer vb = create_vertexbuffer(vertices, sizeof(float) * 16 * 12);
+    float *vertices = create_positions_for_grid(5, 5, 1.0f);
+    unsigned int *indices = create_indices(quad_count);
+
+    vertexbuffer vb = create_vertexbuffer(vertices, sizeof(float) * quad_count * 12);
     set_vertexbuffer_attibutes(&vb, 0, 3, 3 * sizeof(float), (void *)0);
-    unsigned int ib = create_indexbuffer(indices, sizeof(unsigned int) * 16 * 6);
+    unsigned int ib = create_indexbuffer(indices, sizeof(unsigned int) * quad_count * 6);
 
     ///////
     glUseProgram(context->context_shader.programID);
@@ -93,7 +103,7 @@ int main()
     mat4 temp = mat4_diagonal(1.0f);
     temp = mat4_translate(&temp, &pos);
 
-    vec3 scale_vector = {100, 100, 0.0f};
+    vec3 scale_vector = {15, 15, 0.0f};
     temp = mat4_scale(&temp, &scale_vector);
 
     glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&temp);
@@ -127,7 +137,7 @@ int main()
         /* render_level(context, &grid); */
         /* draw_colored_quad(context, &playr.position, &color, 40.0f); */
 
-        glDrawElements(GL_TRIANGLES, 16 * 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, quad_count * 6, GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(win->handle);
         glfwPollEvents();
     }
