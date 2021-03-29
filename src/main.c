@@ -12,21 +12,21 @@
 
 void generate_batch_quad(float *array, int x, int y)
 {
-    const float stride = 0.5f;
+    const float stride = 0.9f;
 
-    array[0] = (float)x + stride;
-    array[1] = (float)y + stride;
+    array[0] = (float)x;
+    array[1] = (float)y;
     array[2] = 0.0f;
 
     array[3] = (float)x + stride;
-    array[4] = (float)y - stride;
+    array[4] = (float)y;
     array[5] = 0.0f;
 
-    array[6] = (float)x - stride;
-    array[7] = (float)y - stride;
+    array[6] = (float)x + stride;
+    array[7] = (float)y + stride;
     array[8] = 0.0f;
 
-    array[9] = (float)x - stride;
+    array[9] = (float)x;
     array[10] = (float)y + stride;
     array[11] = 0.0f;
 }
@@ -47,7 +47,7 @@ float *create_positions_for_grid(int x, int y, float space_size)
     {
         for (int j = 0; j < x; ++j)
         {
-            generate_batch_quad(&positions[count], j + (j * space_size), i + (i * space_size));
+            generate_batch_quad(&positions[count], j, i);
             count += 12;
         }
     }
@@ -86,9 +86,9 @@ int main()
 
     const float MOVE_DISTANCE = 42.0f;
 
-    const int quad_count = 25;
+    const int quad_count = 100;
 
-    float *vertices = create_positions_for_grid(5, 5, 1.0f);
+    float *vertices = create_positions_for_grid(10, 10, 1.0f);
     unsigned int *indices = create_indices(quad_count);
 
     vertexbuffer vb = create_vertexbuffer(vertices, sizeof(float) * quad_count * 12);
@@ -99,11 +99,11 @@ int main()
     glUseProgram(context->context_shader.programID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 
-    vec3 pos = vec3_create(200.0f, 200.0f, 0.0f);
+    vec3 pos = vec3_create(10.0f, 10.0f, 0.0f);
     mat4 temp = mat4_diagonal(1.0f);
     temp = mat4_translate(&temp, &pos);
 
-    vec3 scale_vector = {15, 15, 0.0f};
+    vec3 scale_vector = {50, 50, 0.0f};
     temp = mat4_scale(&temp, &scale_vector);
 
     glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&temp);
