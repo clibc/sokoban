@@ -41,6 +41,55 @@ void render_level(renderer_context *context, const Grid *grid)
     }
 }
 
-/* Quad create_quad(float x, float y) */
-/* { */
-/* } */
+Quad *malloc_batch_quads(int quad_count)
+{
+    return (Quad *)malloc(quad_count * sizeof(Quad));
+}
+
+unsigned int *malloc_batch_indices(int quad_count)
+{
+    return (unsigned int *)malloc(quad_count * 6 * sizeof(unsigned int));
+}
+
+void create_batch_quad(Quad *quad, int x, int y)
+{
+    const float stride = 0.9f;
+
+    quad->vertices[0].positions[0] = (float)x;
+    quad->vertices[0].positions[1] = (float)y;
+    quad->vertices[0].positions[2] = 0.0f;
+    quad->vertices[0].color = 0.0f;
+
+    quad->vertices[1].positions[0] = (float)x + stride;
+    quad->vertices[1].positions[1] = (float)y;
+    quad->vertices[1].positions[2] = 0.0f;
+    quad->vertices[1].color = 0.0f;
+
+    quad->vertices[2].positions[0] = (float)x + stride;
+    quad->vertices[2].positions[1] = (float)y + stride;
+    quad->vertices[2].positions[2] = 0.0f;
+    quad->vertices[2].color = 0.0f;
+
+    quad->vertices[3].positions[0] = (float)x;
+    quad->vertices[3].positions[1] = (float)y + stride;
+    quad->vertices[3].positions[2] = 0.0f;
+    quad->vertices[3].color = 0.0f;
+}
+
+void create_batch_indices(unsigned int *indices, int quad_count)
+{
+    const int size = quad_count * 6;
+
+    int count = 0;
+    for (int i = 0; i < size; i = i + 6)
+    {
+        indices[i] = count;
+        indices[i + 1] = count + 1;
+        indices[i + 2] = count + 3;
+        indices[i + 3] = count + 1;
+        indices[i + 4] = count + 2;
+        indices[i + 5] = count + 3;
+
+        count += 4;
+    }
+}

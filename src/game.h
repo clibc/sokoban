@@ -30,6 +30,10 @@ typedef struct
 Grid create_grid();
 void render_level(renderer_context *context, const Grid *grid);
 
-Quad create_quad(float x, float y);
+Quad *malloc_batch_quads(int quad_count);
+unsigned int *malloc_batch_indices(int quad_count);
+
+void create_batch_quad(Quad *quad, int x, int y);
+void create_batch_indices(unsigned int *indices, int quad_count);
 
 #endif
