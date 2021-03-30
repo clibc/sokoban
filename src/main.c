@@ -10,14 +10,26 @@
 
 #include <stdlib.h>
 
+float lerp(float a, float b, float f)
+{
+    return a + f * (b - a);
+}
+
+vec3 vec3_lerp(vec3 a, vec3 b, float f)
+{
+    vec3 retval = vec3_create(0.0f, 0.0f, 0.0f);
+
+    retval.x = lerp(a.x, b.x, f);
+    retval.y = lerp(a.y, b.y, f);
+    return retval;
+}
+
 int main()
 {
     Window *win = create_window("Sokoban", WINDOW_WIDTH, WINDOW_HEIGHT, 3, 0);
     renderer_context *context = init_renderer(win);
 
-    //Grid grid = create_grid();
-
-    Player playr = {vec3_create(41.0f, 41.0f, 0.0f)};
+    Positions playr = {vec3_create(0.0f, 0.0f, 0.0f), {10.0f, 100.0f, 0.0f}};
 
     const float MOVE_DISTANCE = 1.0f;
 
@@ -38,33 +50,64 @@ int main()
     glUseProgram(context->context_shader.programID);
     glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&temp);
 
-    playr.position.x = 0;
-    playr.position.y = 0;
-
     Quad *quads = malloc_batch_quads(quad_count);
     unsigned int *indices = malloc_batch_indices(quad_count);
 
-    ///////
+    mat4 view_matrix = mat4_diagonal(1.0f);
+    view_matrix = mat4_translate(&view_matrix, &playr.camera_position);
+
+    view_matrix = mat4_translate(&view_matrix, &playr.camera_position);
+    int loc = glGetUniformLocation(context->context_shader.programID, "view");
+    if (loc != -1)
+    {
+        glUniformMatrix4fv(loc, 1, GL_FALSE, (GLfloat *)&view_matrix);
+    }
+    else
+        printf("Failed to get location");
+
+    int interpolationFramesCount = 45;
+    int elapsedFrames = 0;
+
+    vec3 oldtransform = playr.camera_position;
     while (!glfwWindowShouldClose(win->handle))
     {
+        float interpolationRatio = (float)elapsedFrames / interpolationFramesCount;
         fill_screen_with_color(21, 21, 21, 1);
+
+        const CAMERAMOVE = 20.0f;
 
         if (get_key_down(GLFW_KEY_A))
         {
-            playr.position.x -= MOVE_DISTANCE;
+            playr.player_position.x -= MOVE_DISTANCE;
+            playr.camera_position.x += CAMERAMOVE;
         }
         else if (get_key_down(GLFW_KEY_D))
         {
-            playr.position.x += MOVE_DISTANCE;
+            playr.player_position.x += MOVE_DISTANCE;
+            playr.camera_position.x -= CAMERAMOVE;
         }
         else if (get_key_down(GLFW_KEY_W))
         {
-            playr.position.y += MOVE_DISTANCE;
+            playr.player_position.y += MOVE_DISTANCE;
+            playr.camera_position.y -= CAMERAMOVE;
         }
         else if (get_key_down(GLFW_KEY_S))
         {
-            playr.position.y -= MOVE_DISTANCE;
+            playr.player_position.y -= MOVE_DISTANCE;
+            playr.camera_position.y += CAMERAMOVE;
         }
+        playr.camera_position.x = -playr.player_position.x;
+        playr.camera_position.y = -playr.player_position.y;
+        playr.camera_position.z = 0.0f;
+        oldtransform = vec3_lerp(oldtransform, playr.camera_position, interpolationRatio);
+        view_matrix = mat4_translate(&view_matrix, &oldtransform);
+
+        if (elapsedFrames < 5)
+            printf("reset\n");
+
+        elapsedFrames = (elapsedFrames + 1) % (interpolationFramesCount + 1);
+
+        glUniformMatrix4fv(loc, 1, GL_FALSE, (GLfloat *)&view_matrix);
 
         {
             int count = 0;
@@ -79,8 +122,8 @@ int main()
 
             {
                 Quad *quad = &quads[quad_count - 1];
-                int x = playr.position.x;
-                int y = playr.position.y;
+                int x = playr.player_position.x;
+                int y = playr.player_position.y;
 
                 const float stride = 0.9f;
 

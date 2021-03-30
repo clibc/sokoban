@@ -6,8 +6,9 @@
 
 typedef struct
 {
-    vec3 position;
-} Player;
+    vec3 player_position;
+    vec3 camera_position;
+} Positions;
 
 typedef struct
 {
