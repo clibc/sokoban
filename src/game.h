@@ -20,7 +20,6 @@ typedef struct
 typedef struct
 {
     float positions[3];
-    float color;
 } Vertex;
 
 typedef struct

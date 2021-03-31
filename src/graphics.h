@@ -34,6 +34,7 @@ typedef struct
 {
     shader context_shader;
     shader texture_shader;
+    shader batch_shader;
     vertexbuffer texture_vb;
     vertexbuffer context_vb;
     unsigned int context_ib;

@@ -36,7 +36,6 @@ renderer_context *init_renderer(Window *win)
     glUniformMatrix4fv(context->projLoc, 1, GL_FALSE, (GLfloat *)&context->projection);
 
     // texture shader
-
     context->texture_shader = create_shader("./src/shaders/texture.vs",
                                             "./src/shaders/texture_frag.vs");
 
@@ -48,6 +47,13 @@ renderer_context *init_renderer(Window *win)
     GLuint texture_project_loc = glGetUniformLocation(context->texture_shader.programID, "projection");
     glUniformMatrix4fv(texture_project_loc, 1, GL_FALSE, (GLfloat *)&context->projection);
 
+	// batch shader
+    context->batch_shader = create_shader("./src/shaders/batch_vs.vs",
+                                            "./src/shaders/batch_fs.vs");
+	glUseProgram(context->batch_shader.programID);
+    GLuint batch_project_loc = glGetUniformLocation(context->batch_shader.programID, "projection");
+	glUniformMatrix4fv(batch_project_loc, 1, GL_FALSE, (GLfloat *)&context->projection);
+	
     return context;
 }
 
