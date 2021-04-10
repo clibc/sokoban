@@ -27,11 +27,11 @@ vec3 vec3_lerp(vec3 a, vec3 b, float f)
 vec3 camera_lookat(vec3 target)
 {
 	// assume screen size is 600x600
-	const camera_size_half = -300.0f;
+	const camera_size_half = -300.0f / 2.0f;
 	vec3 retval = {0.0f};
 
-	retval.x = target.x - camera_size_half;
-	retval.y = target.y - camera_size_half;
+	retval.x = (target.x / 2.0f) - camera_size_half;
+	retval.y = (target.y / 2.0f) - camera_size_half;
 	
 	return retval;
 }
@@ -69,9 +69,9 @@ int main()
     mat4 view_matrix = mat4_diagonal(1.0f);
     view_matrix = mat4_translate(&view_matrix, &playr.camera_position);
 
-	vec3 scaleview = vec3_create(1.5f, 1.5f, 0.0f);  
+	vec3 scaleview = vec3_create(2.0f, 2.0f, 0.0f);  
     view_matrix = mat4_translate(&view_matrix, &playr.camera_position);
-	//view_matrix = mat4_scale(&view_matrix, &scaleview);
+	view_matrix = mat4_scale(&view_matrix, &scaleview);
     int loc = glGetUniformLocation(context->batch_shader.programID, "view");
 	int color_loc = glGetUniformLocation(context->batch_shader.programID, "u_color");
     if (loc != -1)
@@ -96,27 +96,27 @@ int main()
         float interpolationRatio = (float)elapsedFrames / interpolationFramesCount;
         fill_screen_with_color(21, 21, 21, 1);
 
-        const CAMERAMOVE = 10.0f;
+        const CAMERAMOVE = MOVE_DISTANCE * 2.0f;
 
         if (get_key_down(GLFW_KEY_A))
         {
             playerPos.x -= MOVE_DISTANCE;
-			newtransform.x += MOVE_DISTANCE;
+			newtransform.x += CAMERAMOVE;
         }
         else if (get_key_down(GLFW_KEY_D))
         {
             playerPos.x += MOVE_DISTANCE;
-			newtransform.x -= MOVE_DISTANCE;
+			newtransform.x -= CAMERAMOVE;
         }
         else if (get_key_down(GLFW_KEY_W))
         {
             playerPos.y += MOVE_DISTANCE;
-			newtransform.y -= MOVE_DISTANCE;
+			newtransform.y -= CAMERAMOVE;
         }
         else if (get_key_down(GLFW_KEY_S))
         {
             playerPos.y -= MOVE_DISTANCE;
-			newtransform.y += MOVE_DISTANCE;
+			newtransform.y += CAMERAMOVE;
         }
 		
         oldtransform = vec3_lerp(oldtransform, newtransform, interpolationRatio);
