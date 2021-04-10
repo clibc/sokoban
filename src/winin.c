@@ -84,7 +84,7 @@ static KeyPair keyboard_inputs[] = {
 
 void set_key_lookup_table(int keycode, int ispressed)
 {
-    for (unsigned long int i = 0; i < sizeof(keyboard_inputs); ++i)
+    for (unsigned long int i = 0; i < sizeof(keyboard_inputs) / sizeof(KeyPair); ++i)
         if (keyboard_inputs[i].key_code == keycode)
             keyboard_inputs[i].is_pressed = ispressed;
 }
@@ -92,7 +92,7 @@ void set_key_lookup_table(int keycode, int ispressed)
 int get_key_down(int keycode)
 {
     int retval = 0;
-    for (unsigned long int i = 0; i < sizeof(keyboard_inputs); ++i)
+    for (unsigned long int i = 0; i < sizeof(keyboard_inputs) / sizeof(KeyPair); ++i)
         if (keyboard_inputs[i].key_code == keycode)
         {
             retval = keyboard_inputs[i].is_pressed;
