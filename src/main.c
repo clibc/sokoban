@@ -26,14 +26,14 @@ vec3 vec3_lerp(vec3 a, vec3 b, float f)
 
 vec3 camera_lookat(vec3 target)
 {
-	// assume screen size is 600x600
-	const camera_size_half = -300.0f / 2.0f;
-	vec3 retval = {0.0f};
+    // assume screen size is 600x600
+    const camera_size_half = -300.0f / 2.0f;
+    vec3 retval = {0.0f};
 
-	retval.x = (target.x / 2.0f) - camera_size_half;
-	retval.y = (target.y / 2.0f) - camera_size_half;
-	
-	return retval;
+    retval.x = (target.x / 2.0f) - camera_size_half;
+    retval.y = (target.y / 2.0f) - camera_size_half;
+
+    return retval;
 }
 
 int main()
@@ -60,7 +60,7 @@ int main()
     vec3 scale_vector = {50, 50, 0.0f};
     temp = mat4_scale(&temp, &scale_vector);
     glUseProgram(context->batch_shader.programID);
-	int mloc = glGetUniformLocation(context->batch_shader.programID, "model");
+    int mloc = glGetUniformLocation(context->batch_shader.programID, "model");
     glUniformMatrix4fv(mloc, 1, GL_FALSE, (GLfloat *)&temp);
 
     Quad *quads = malloc_batch_quads(quad_count);
@@ -69,11 +69,11 @@ int main()
     mat4 view_matrix = mat4_diagonal(1.0f);
     view_matrix = mat4_translate(&view_matrix, &playr.camera_position);
 
-	vec3 scaleview = vec3_create(2.0f, 2.0f, 0.0f);  
+    vec3 scaleview = vec3_create(2.0f, 2.0f, 0.0f);
     view_matrix = mat4_translate(&view_matrix, &playr.camera_position);
-	view_matrix = mat4_scale(&view_matrix, &scaleview);
+    view_matrix = mat4_scale(&view_matrix, &scaleview);
     int loc = glGetUniformLocation(context->batch_shader.programID, "view");
-	int color_loc = glGetUniformLocation(context->batch_shader.programID, "u_color");
+    int color_loc = glGetUniformLocation(context->batch_shader.programID, "u_color");
     if (loc != -1)
     {
         glUniformMatrix4fv(loc, 1, GL_FALSE, (GLfloat *)&view_matrix);
@@ -84,14 +84,13 @@ int main()
     int interpolationFramesCount = 45;
     int elapsedFrames = 0;
 
+    vec3 playerColor = vec3_create(1.0f, 0.0f, 0.0f);
+    vec3 playerPos = pos;
 
-	vec3 playerColor = vec3_create(1.0f, 0.0f, 0.0f);
-	vec3 playerPos = pos;
+    vec3 oldtransform = camera_lookat(playerPos);
+    vec3 newtransform = oldtransform;
 
-	vec3 oldtransform = camera_lookat(playerPos);
-	vec3 newtransform = oldtransform;
-	
-	while (!glfwWindowShouldClose(win->handle))
+    while (!glfwWindowShouldClose(win->handle))
     {
         float interpolationRatio = (float)elapsedFrames / interpolationFramesCount;
         fill_screen_with_color(21, 21, 21, 1);
@@ -100,31 +99,32 @@ int main()
 
         if (get_key_down(GLFW_KEY_A))
         {
+
             playerPos.x -= MOVE_DISTANCE;
-			newtransform.x += CAMERAMOVE;
+            newtransform.x += CAMERAMOVE;
         }
         else if (get_key_down(GLFW_KEY_D))
         {
             playerPos.x += MOVE_DISTANCE;
-			newtransform.x -= CAMERAMOVE;
+            newtransform.x -= CAMERAMOVE;
         }
         else if (get_key_down(GLFW_KEY_W))
         {
             playerPos.y += MOVE_DISTANCE;
-			newtransform.y -= CAMERAMOVE;
+            newtransform.y -= CAMERAMOVE;
         }
         else if (get_key_down(GLFW_KEY_S))
         {
             playerPos.y -= MOVE_DISTANCE;
-			newtransform.y += CAMERAMOVE;
+            newtransform.y += CAMERAMOVE;
         }
-		
+
         oldtransform = vec3_lerp(oldtransform, newtransform, interpolationRatio);
         view_matrix = mat4_translate(&view_matrix, &oldtransform);
-		
+
         elapsedFrames = (elapsedFrames + 1) % (interpolationFramesCount + 1);
 
-		glUseProgram(context->batch_shader.programID);
+        glUseProgram(context->batch_shader.programID);
         glUniformMatrix4fv(loc, 1, GL_FALSE, (GLfloat *)&view_matrix);
 
         {
@@ -143,34 +143,33 @@ int main()
             glBufferData(GL_ARRAY_BUFFER, quad_count * sizeof(Quad), quads, GL_DYNAMIC_DRAW);
             set_vertexbuffer_attibutes((vertexbuffer *)&vb, 0, 3, 3 * sizeof(float), (void *)0);
 
-			vec4 cube_color = {0.0f, 1.0f, 0.0f, 1.0f};
-			glUniformMatrix4fv(loc, 1, GL_FALSE, (GLfloat *)&view_matrix);
-			glUniformMatrix4fv(mloc, 1, GL_FALSE, (GLfloat *)&temp);
-			glUniform4fv(color_loc, 1, (GLfloat *)&cube_color);
+            vec4 cube_color = {0.0f, 1.0f, 0.0f, 1.0f};
+            glUniformMatrix4fv(loc, 1, GL_FALSE, (GLfloat *)&view_matrix);
+            glUniformMatrix4fv(mloc, 1, GL_FALSE, (GLfloat *)&temp);
+            glUniform4fv(color_loc, 1, (GLfloat *)&cube_color);
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, quad_count * 6 * sizeof(unsigned int), indices, GL_DYNAMIC_DRAW);
-			glDrawElements(GL_TRIANGLES, quad_count * 6, GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, quad_count * 6, GL_UNSIGNED_INT, 0);
         }
 
-		glUseProgram(context->batch_shader.programID);
-		glBindBuffer(GL_ARRAY_BUFFER, context->context_vb.bufferID);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, context->context_ib);
+        glUseProgram(context->batch_shader.programID);
+        glBindBuffer(GL_ARRAY_BUFFER, context->context_vb.bufferID);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, context->context_ib);
 
-		mat4 temp = mat4_diagonal(1.0f);
-		temp = mat4_translate(&temp, &playerPos);
-		
-		vec3 scale_vector = {50.0f, 50.0f, 0.0f};
-		temp = mat4_scale(&temp, &scale_vector);
+        mat4 temp = mat4_diagonal(1.0f);
+        temp = mat4_translate(&temp, &playerPos);
 
-		glUniformMatrix4fv(mloc, 1, GL_FALSE, (GLfloat *)&temp);
-		glUniformMatrix4fv(loc, 1, GL_FALSE, (GLfloat *)&view_matrix);
-		glUniform4fv(color_loc, 1, (GLfloat *)&playerColor);
+        vec3 scale_vector = {50.0f, 50.0f, 0.0f};
+        temp = mat4_scale(&temp, &scale_vector);
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glUniformMatrix4fv(mloc, 1, GL_FALSE, (GLfloat *)&temp);
+        glUniformMatrix4fv(loc, 1, GL_FALSE, (GLfloat *)&view_matrix);
+        glUniform4fv(color_loc, 1, (GLfloat *)&playerColor);
 
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-		//draw_colored_quad(context, &playerPos, &playerColor, 100.0f);
+        //draw_colored_quad(context, &playerPos, &playerColor, 100.0f);
 
         glfwSwapBuffers(win->handle);
         glfwPollEvents();
