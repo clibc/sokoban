@@ -36,6 +36,16 @@ vec3 camera_lookat(vec3 target)
     return retval;
 }
 
+static float deltaTime = 0.0f;
+void calculate_delta()
+{
+    static double t1, t2;
+
+    t2 = glfwGetTime();
+    deltaTime = (t2 - t1);
+    t1 = t2;
+}
+
 int main()
 {
     Window *win = create_window("Sokoban", WINDOW_WIDTH, WINDOW_HEIGHT, 3, 0);
@@ -81,9 +91,6 @@ int main()
     else
         printf("Failed to get location");
 
-    int interpolationFramesCount = 45;
-    int elapsedFrames = 0;
-
     vec3 playerColor = vec3_create(1.0f, 0.0f, 0.0f);
     vec3 playerPos = pos;
 
@@ -92,8 +99,11 @@ int main()
 
     while (!glfwWindowShouldClose(win->handle))
     {
-        float interpolationRatio = (float)elapsedFrames / interpolationFramesCount;
+
         fill_screen_with_color(21, 21, 21, 1);
+
+        calculate_delta();
+        printf("interpolation ratio : %f\n", deltaTime);
 
         const CAMERAMOVE = MOVE_DISTANCE * 2.0f;
 
@@ -119,10 +129,8 @@ int main()
             newtransform.y += CAMERAMOVE;
         }
 
-        oldtransform = vec3_lerp(oldtransform, newtransform, interpolationRatio);
+        oldtransform = vec3_lerp(oldtransform, newtransform, deltaTime * 3.0f);
         view_matrix = mat4_translate(&view_matrix, &oldtransform);
-
-        elapsedFrames = (elapsedFrames + 1) % (interpolationFramesCount + 1);
 
         glUseProgram(context->batch_shader.programID);
         glUniformMatrix4fv(loc, 1, GL_FALSE, (GLfloat *)&view_matrix);
