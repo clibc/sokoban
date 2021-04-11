@@ -8,6 +8,7 @@
 
 #include "game.h"
 
+#include "imageloader.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -85,6 +86,7 @@ int main()
     vec3 scaleview = vec3_create(1.5f, 1.5f, 0.0f);
     view_matrix = mat4_translate(&view_matrix, &playr.camera_position);
     view_matrix = mat4_scale(&view_matrix, &scaleview);
+
     int loc = glGetUniformLocation(context->batch_shader.programID, "view");
     int color_loc = glGetUniformLocation(context->batch_shader.programID, "u_color");
     if (loc != -1)
@@ -100,13 +102,25 @@ int main()
     vec3 oldtransform = camera_lookat(playerPos);
     vec3 newtransform = oldtransform;
 
+    unsigned int width, height;
+    char *dank_image = load_bmp("feelsdankman.bmp", &width, &height);
+
+    GLuint dank_texture;
+    glGenTextures(1, &dank_texture);
+    glBindTexture(GL_TEXTURE_2D, dank_texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width,
+                 height, 0, GL_BGRA, GL_UNSIGNED_BYTE, dank_image);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    vec3 image_pos = {100.0f, 100.0f, 0.0f};
+
     while (!glfwWindowShouldClose(win->handle))
     {
 
         fill_screen_with_color(21, 21, 21, 1);
 
         calculate_delta();
-        printf("interpolation ratio : %f\n", deltaTime);
+        double interpolationRate = deltaTime * 3.0f;
+        //printf("interpolation ratio : %f\n", interpolationRate);
 
         const float CAMERAMOVE = MOVE_DISTANCE * 1.5f;
 
@@ -132,7 +146,7 @@ int main()
             newtransform.y += CAMERAMOVE;
         }
 
-        oldtransform = vec3_lerp(oldtransform, newtransform, deltaTime * 3.0f);
+        oldtransform = vec3_lerp(oldtransform, newtransform, interpolationRate);
         view_matrix = mat4_translate(&view_matrix, &oldtransform);
 
         glUseProgram(context->batch_shader.programID);
@@ -179,6 +193,14 @@ int main()
         glUniform4fv(color_loc, 1, (GLfloat *)&playerColor);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        //TODO : HANDLE THIS ON BATCH SHADER OR CREATE A NEW *GENERALIZED* SHADER OR SOMETHING :P
+        glUseProgram(context->texture_shader.programID);
+        GLuint texture_view_loc = glGetUniformLocation(context->texture_shader.programID, "view");
+        glUniformMatrix4fv(texture_view_loc, 1, GL_FALSE, (GLfloat *)&view_matrix);
+
+        image_pos = playerPos;
+        draw_textured_quad(context, &image_pos, 120.0f, dank_texture);
 
         glfwSwapBuffers(win->handle);
         glfwPollEvents();
