@@ -113,13 +113,12 @@ void draw_textured_quad(const renderer_context *context, const vec3 *position, f
     glBindTexture(GL_TEXTURE_2D, textureID);
 
     mat4 temp = mat4_diagonal(1.0f);
-
     temp = mat4_translate(&temp, position);
 
     vec3 scale_vector = {cube_size, cube_size, 0.0f};
     temp = mat4_scale(&temp, &scale_vector);
 
-    //
+    // THIS WILL BE OUT
     vec3 rotatev = {0.0f, 0.0f, 1.0f};
     mat4 rotate = mat4_rotate(-90.0f, &rotatev);
     temp = mat4_multiply(&temp, &rotate);
