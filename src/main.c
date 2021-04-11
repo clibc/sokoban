@@ -168,7 +168,7 @@ int main()
             glBufferData(GL_ARRAY_BUFFER, quad_count * sizeof(Quad), quads, GL_DYNAMIC_DRAW);
             set_vertexbuffer_attibutes((vertexbuffer *)&vb, 0, 3, 3 * sizeof(float), (void *)0);
 
-            vec4 cube_color = {0.0f, 1.0f, 0.0f, 1.0f};
+            vec4 cube_color = {2.0f, 5.0f, 0.0f, 0.5f};
             glUniformMatrix4fv(loc, 1, GL_FALSE, (GLfloat *)&view_matrix);
             glUniformMatrix4fv(mloc, 1, GL_FALSE, (GLfloat *)&temp);
             glUniform4fv(color_loc, 1, (GLfloat *)&cube_color);
@@ -192,7 +192,7 @@ int main()
         glUniformMatrix4fv(loc, 1, GL_FALSE, (GLfloat *)&view_matrix);
         glUniform4fv(color_loc, 1, (GLfloat *)&playerColor);
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         //TODO : HANDLE THIS ON BATCH SHADER OR CREATE A NEW *GENERALIZED* SHADER OR SOMETHING :P
         glUseProgram(context->texture_shader.programID);
@@ -200,7 +200,7 @@ int main()
         glUniformMatrix4fv(texture_view_loc, 1, GL_FALSE, (GLfloat *)&view_matrix);
 
         image_pos = playerPos;
-        draw_textured_quad(context, &image_pos, 50.0f, dank_texture);
+        draw_textured_quad(context, &image_pos, 80.0f, dank_texture);
 
         glfwSwapBuffers(win->handle);
         glfwPollEvents();
