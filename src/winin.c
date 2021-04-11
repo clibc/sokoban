@@ -19,6 +19,12 @@ Window *create_window(const char *name, int width, int height, int glMajor, int 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, retval->gl_minor_ver);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
+    glfwWindowHint(GLFW_RED_BITS, 8);
+    glfwWindowHint(GLFW_GREEN_BITS, 8);
+    glfwWindowHint(GLFW_BLUE_BITS, 8);
+    glfwWindowHint(GLFW_ALPHA_BITS, 8);
+    glfwWindowHint(GLFW_DEPTH_BITS, 32);
+
     retval->handle = glfwCreateWindow(retval->width, retval->height, name, NULL, NULL);
 
     assert(retval->handle != GLEW_OK);
@@ -27,6 +33,9 @@ Window *create_window(const char *name, int width, int height, int glMajor, int 
     glfwSetKeyCallback(retval->handle, key_callback);
 
     assert(glewInit() == 0);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     return retval;
 }
@@ -113,6 +122,6 @@ void fill_screen_with_color(float r, float g, float b, float a)
     float p2 = g / 255.0f;
     float p3 = b / 255.0f;
     float p4 = a;
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(p1, p2, p3, p4);
 }
