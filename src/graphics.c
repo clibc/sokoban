@@ -47,13 +47,13 @@ renderer_context *init_renderer(Window *win)
     GLuint texture_project_loc = glGetUniformLocation(context->texture_shader.programID, "projection");
     glUniformMatrix4fv(texture_project_loc, 1, GL_FALSE, (GLfloat *)&context->projection);
 
-	// batch shader
+    // batch shader
     context->batch_shader = create_shader("./src/shaders/batch_vs.vs",
-                                            "./src/shaders/batch_fs.vs");
-	glUseProgram(context->batch_shader.programID);
+                                          "./src/shaders/batch_fs.vs");
+    glUseProgram(context->batch_shader.programID);
     GLuint batch_project_loc = glGetUniformLocation(context->batch_shader.programID, "projection");
-	glUniformMatrix4fv(batch_project_loc, 1, GL_FALSE, (GLfloat *)&context->projection);
-	
+    glUniformMatrix4fv(batch_project_loc, 1, GL_FALSE, (GLfloat *)&context->projection);
+
     return context;
 }
 
@@ -113,12 +113,20 @@ void draw_textured_quad(const renderer_context *context, const vec3 *position, f
     glBindTexture(GL_TEXTURE_2D, textureID);
 
     mat4 temp = mat4_diagonal(1.0f);
+
     temp = mat4_translate(&temp, position);
 
     vec3 scale_vector = {cube_size, cube_size, 0.0f};
     temp = mat4_scale(&temp, &scale_vector);
 
-    glUniformMatrix4fv(context->modelLoc, 1, GL_FALSE, (GLfloat *)&temp);
+    //
+    vec3 rotatev = {0.0f, 0.0f, 1.0f};
+    mat4 rotate = mat4_rotate(-90.0f, &rotatev);
+    temp = mat4_multiply(&temp, &rotate);
+    //**
+
+    GLuint texture_model_loc = glGetUniformLocation(context->texture_shader.programID, "model");
+    glUniformMatrix4fv(texture_model_loc, 1, GL_FALSE, (GLfloat *)&temp);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
