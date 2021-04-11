@@ -200,7 +200,7 @@ int main()
         glUniformMatrix4fv(texture_view_loc, 1, GL_FALSE, (GLfloat *)&view_matrix);
 
         image_pos = playerPos;
-        draw_textured_quad(context, &image_pos, 120.0f, dank_texture);
+        draw_textured_quad(context, &image_pos, 50.0f, dank_texture);
 
         glfwSwapBuffers(win->handle);
         glfwPollEvents();
