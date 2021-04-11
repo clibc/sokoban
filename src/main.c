@@ -8,6 +8,7 @@
 
 #include "game.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 float lerp(float a, float b, float f)
@@ -28,9 +29,9 @@ vec3 camera_lookat(vec3 target)
 {
 
     // assume screen size is 600x600
-    const zoom = 1.0f;
-    const camera_size_half = -245.0f / zoom;
-    vec3 retval = {0.0f};
+    const float zoom = 1.0f;
+    const float camera_size_half = -245.0f / zoom;
+    vec3 retval = {0.0f, 0.0f, 0.0f};
 
     retval.x = target.x - camera_size_half;
     retval.y = target.y - camera_size_half;
@@ -107,7 +108,7 @@ int main()
         calculate_delta();
         printf("interpolation ratio : %f\n", deltaTime);
 
-        const CAMERAMOVE = MOVE_DISTANCE * 1.5f;
+        const float CAMERAMOVE = MOVE_DISTANCE * 1.5f;
 
         if (get_key_down(GLFW_KEY_A))
         {
@@ -178,8 +179,6 @@ int main()
         glUniform4fv(color_loc, 1, (GLfloat *)&playerColor);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        //draw_colored_quad(context, &playerPos, &playerColor, 100.0f);
 
         glfwSwapBuffers(win->handle);
         glfwPollEvents();
